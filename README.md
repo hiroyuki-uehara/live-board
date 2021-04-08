@@ -33,6 +33,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 The MIT License (MIT) - See file 'LICENSE' in this project
 
-# Copyright
+### Copyright
 
 Copyright © 2021 Hiroyuki Uehara. All Rights Reserved.
