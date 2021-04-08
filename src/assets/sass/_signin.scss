@@ -35,25 +35,65 @@
     max-height: 100%;
     overflow: hidden;
   }
-  Header {
-    width: 100vw;
-    height: 10vh;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    button {
-      p {
-        font-size: 2rem;
-        padding: 1rem;
-      }
-    }
-  }
   #main {
     width: 100vw;
-    height: 80vh;
-  }
-  Footer {
-    width: 100vw;
-    height: 10vh;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    #auth-box {
+      padding: 2rem 0;
+      font-size: 3rem;
+      background-color: snow;
+      border-radius: 0.3rem;
+      width: 40vw;
+      height: 80vh;
+      h1 {
+        font-size: 2rem;
+      }
+      .wrapper {
+        width: 36vw;
+        height: 60vh;
+        margin: 0 auto;
+        font-size: 2rem;
+        #form-box {
+          width: 36vw;
+          height: 46vh;
+          padding: 2rem 1rem 1rem;
+          background-color: seashell;
+          border-radius: 0.3rem;
+          label {
+            padding: 0 1.8rem 0.5rem;
+          }
+          .auth-input {
+            
+            font-size: 1.8rem;
+            margin: 0rem auto 0.5rem;
+            padding: 2rem 1rem;
+            width: 32vw;
+            height: 6vh;
+          }
+          button {
+            font-size: 2rem;
+            margin: 3rem auto 0;
+            padding-bottom: 1rem;
+            width: 32vw;
+            height: 7vh;
+          }
+        }
+        div {
+          width: 36vw;
+          height: 10vh;
+          margin-top: 1.5rem;
+          padding: 1rem;
+          border: 0.1rem solid lightgray;
+          border-radius: 0.3rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Header>
-      <div><p style="font-size: 5rem; font-weight: 700" class="ml-5">Home</p></div>
+      <div><p class="header-title ml-5">Home</p></div>
       <div>
         <router-link to="/board" class="my-auto ml-auto mr-3">
           <b-button variant="outline-primary"><p>Board</p></b-button>

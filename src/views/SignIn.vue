@@ -1,37 +1,50 @@
 <template>
   <div class="container">
-    <Header>
-      <div><p style="font-size: 5rem; font-weight: 700" class="ml-5">Sign in</p></div>
-      <div>
-        <router-link to="/" class="my-auto ml-auto mr-3">
-          <b-button variant="outline-success"><p>Home</p></b-button>
-        </router-link>
-        <router-link to="/board" class="my-auto mr-3">
-          <b-button variant="outline-primary"><p>Board</p></b-button>
-        </router-link>
-        <router-link to="/register" class="my-auto mr-3">
-          <b-button variant="outline-dark"><p>Register</p></b-button>
-        </router-link>
+    <div id="main">
+      <div id="auth-box">
+        <div class="text-center">
+          <font-awesome-icon :icon="['fas', 'chalkboard']" style="font-size: 4rem" />
+        </div>
+        <h1 class="text-center text-muted my-3">
+          Sign in to
+          <strong> Live Board </strong>
+        </h1>
+        <div class="wrapper">
+          <b-form id="form-box">
+            <label for="input-email">Email address</label>
+            <b-form-input id="input-email" type="email" class="auth-input" required></b-form-input>
+
+            <label for="input-password">Password</label>
+            <b-form-input
+              id="input-password"
+              type="password"
+              class="auth-input"
+              required
+            ></b-form-input>
+
+            <b-button type="submit" variant="success btn-block">Sign in</b-button>
+          </b-form>
+          <div>
+            <p>
+              New to Live Board?
+              <router-link to="/register"
+                ><span class="ml-2"> Create an account. </span>
+              </router-link>
+            </p>
+          </div>
+        </div>
       </div>
-    </Header>
-    <div id="main"></div>
-    <Footer />
+    </div>
   </div>
 </template>
 
 <script>
-import Header from '../components/Header.vue';
-import Footer from '../components/Footer.vue';
-
 export default {
   name: 'SignIn',
   data() {
     return {};
   },
-  components: {
-    Header,
-    Footer,
-  },
+  components: {},
 };
 </script>
 

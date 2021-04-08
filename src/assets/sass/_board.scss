@@ -12,12 +12,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    button {
-      p {
-        font-size: 2rem;
-        padding: 1rem;
-      }
-    }
   }
   .row {
     width: 100vw;
@@ -44,13 +38,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .header-title {
+      font-size: 3rem;
+      font-weight: 700;
+    }
     button {
       p {
-        font-size: 2rem;
-        padding: 1rem;
+        font-size: 1.4rem;
+        padding: 0.8rem;
       }
     }
-    
   }
   .row {
     width: 100vw;
@@ -62,5 +59,4 @@
   #main {
     height: 90vh;
   }
-  
 }
