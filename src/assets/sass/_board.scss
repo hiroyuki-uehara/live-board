@@ -58,5 +58,14 @@
   }
   #main {
     height: 90vh;
+    button {
+      width: 15rem;
+      height: 8rem;
+      margin: 1rem;
+      p {
+        font-size: 3rem;
+        font-weight: bold;
+      }
+    }
   }
 }

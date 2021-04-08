@@ -16,12 +16,19 @@
     </Header>
     <div class="row">
       <Sidebar id="sidebar" class="col-md-3" />
-      <div id="main" class="col-md-9"></div>
+      <div id="main" class="col-md-9">
+        <b-button variant="light" @click="signOut">
+          <p>Sign out</p>
+        </b-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
 import Header from '../components/Header.vue';
 import Sidebar from '../components/Sidebar.vue';
 
@@ -33,6 +40,12 @@ export default {
   components: {
     Header,
     Sidebar,
+  },
+  methods: {
+    signOut() {
+      firebase.auth().signOut();
+      this.$router.push('/signin');
+    },
   },
 };
 </script>

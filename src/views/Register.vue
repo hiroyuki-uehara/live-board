@@ -19,17 +19,24 @@
         <p class="text-center text-muted">Join Live Board</p>
         <h1 class="text-center">Create your account</h1>
         <div id="form-box">
-          <b-form>
+          <b-form @submit.prevent="registerUser">
             <label for="input-username">Username<sup> *</sup></label>
             <b-form-input
               id="input-username"
               type="text"
+              v-model="username"
               class="auth-input"
               required
             ></b-form-input>
 
             <label for="input-email">Email address<sup> *</sup></label>
-            <b-form-input id="input-email" type="email" class="auth-input" required></b-form-input>
+            <b-form-input
+              id="input-email"
+              type="email"
+              v-model="email"
+              class="auth-input"
+              required
+            ></b-form-input>
             <p>
               <small class="text-muted ml-3">We'll never share your email with anyone else.</small>
             </p>
@@ -38,6 +45,7 @@
             <b-form-input
               id="input-password"
               type="password"
+              v-model="password"
               class="auth-input"
               required
             ></b-form-input>
@@ -56,15 +64,35 @@
 </template>
 
 <script>
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
 import Header from '../components/Header.vue';
 
 export default {
   name: 'Register',
   data() {
-    return {};
+    return {
+      username: '',
+      email: '',
+      password: '',
+    };
   },
   components: {
     Header,
+  },
+  methods: {
+    registerUser() {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then((response) => {
+          console.log(response.user.email);
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    },
   },
 };
 </script>

@@ -71,13 +71,16 @@
     }
     h1 {
       font-size: 4rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2.6rem;
     }
     #form-box {
       width: 40vw;
       height: 60vh;
       margin: 0 auto;
       font-size: 2rem;
+      label {
+        font-size: 1.8rem;
+      }
       sup {
         font-size: 1.6rem;
         color: red;

@@ -10,9 +10,15 @@
           <strong> Live Board </strong>
         </h1>
         <div class="wrapper">
-          <b-form id="form-box">
-            <label for="input-email">Email address</label>
-            <b-form-input id="input-email" type="email" class="auth-input" required></b-form-input>
+          <b-form id="form-box" @submit.prevent="signIn">
+            <label for="input-email">Username or email address</label>
+            <b-form-input
+              id="input-email"
+              type="text"
+              class="auth-input"
+              required
+              v-model="usernameOrEmail"
+            ></b-form-input>
 
             <label for="input-password">Password</label>
             <b-form-input
@@ -20,6 +26,7 @@
               type="password"
               class="auth-input"
               required
+              v-model="password"
             ></b-form-input>
 
             <b-button type="submit" variant="success btn-block">Sign in</b-button>
@@ -39,12 +46,32 @@
 </template>
 
 <script>
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
 export default {
   name: 'SignIn',
   data() {
-    return {};
+    return {
+      usernameOrEmail: '',
+      password: '',
+    };
   },
   components: {},
+  methods: {
+    signIn() {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.usernameOrEmail, this.password)
+        .then((response) => {
+          console.log(response.user.email);
+          this.$router.push('/board');
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    },
+  },
 };
 </script>
 
