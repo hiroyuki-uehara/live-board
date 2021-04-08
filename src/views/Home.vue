@@ -1,9 +1,18 @@
 <template>
-  <div>
+  <div class="container">
     <Header>
-      <router-link to="/board" class="mt-3 ml-auto mr-3">
-        <b-button variant="outline-success"><p>to Board</p></b-button>
-      </router-link>
+      <div><p style="font-size: 5rem; font-weight: 700" class="ml-5">Home</p></div>
+      <div>
+        <router-link to="/board" class="my-auto ml-auto mr-3">
+          <b-button variant="outline-primary"><p>Board</p></b-button>
+        </router-link>
+        <router-link to="/register" class="my-auto mr-3">
+          <b-button variant="outline-dark"><p>Register</p></b-button>
+        </router-link>
+        <router-link to="/register" class="my-auto mr-3">
+          <b-button variant="outline-warning"><p>Sign in</p></b-button>
+        </router-link>
+      </div>
     </Header>
     <div id="main"></div>
     <Footer />
