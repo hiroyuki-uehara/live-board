@@ -16,7 +16,7 @@ import 'firebase/database';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faChalkboard, faCircle, faReply } from '@fortawesome/free-solid-svg-icons';
 import { faWindowClose, faEdit } from '@fortawesome/free-regular-svg-icons';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faGithub, faBitbucket, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faBell, faPlusCircle } from '@fortawesome/pro-regular-svg-icons';
 import { faTrashAlt, faQuestionCircle } from '@fortawesome/pro-light-svg-icons';
 import { faCoffee } from '@fortawesome/pro-duotone-svg-icons';
@@ -52,7 +52,9 @@ library.add(
   faPlusCircle,
   faTrashAlt,
   faQuestionCircle,
-  faCoffee
+  faCoffee,
+  faYoutube,
+  faBitbucket
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);

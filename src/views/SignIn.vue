@@ -3,7 +3,7 @@
     <Header>
       <div><p style="font-size: 5rem; font-weight: 700" class="ml-5">Sign in</p></div>
       <div>
-        <router-link to="/home" class="my-auto ml-auto mr-3">
+        <router-link to="/" class="my-auto ml-auto mr-3">
           <b-button variant="outline-success"><p>Home</p></b-button>
         </router-link>
         <router-link to="/board" class="my-auto mr-3">

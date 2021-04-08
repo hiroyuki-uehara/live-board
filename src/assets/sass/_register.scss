@@ -51,6 +51,54 @@
   #main {
     width: 100vw;
     height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #register-box {
+    padding-top: 4rem;
+    font-size: 4rem;
+    background-color: snow;
+    width: 60vw;
+    height: 80vh;
+    p {
+      font-size: 2.4rem;
+    }
+    h1 {
+      font-size: 5rem;
+    }
+    #form-box {
+      width: 40vw;
+      height: 60vh;
+      margin: 0 auto;
+      font-size: 3rem;
+      sup {
+        font-size: 2rem;
+        color: red;
+      }
+      p {
+        line-height: 0.8;
+        margin-bottom: 2rem;
+        small {
+          font-size: 2.1rem;
+        }
+      }
+      .enter {
+        font-size: 3rem;
+        margin: 1rem 0 1rem;
+        padding: 1rem 2rem;
+        width: 40vw;
+        height: 5vh;
+      }
+      button {
+        font-size: 3rem;
+        margin-top: 5rem;
+        height: 6vh;
+      }
+
+    }
+
+
   }
   Footer {
     width: 100vw;
