@@ -1,10 +1,19 @@
 <template>
   <div class="container">
-    <Header
-      ><router-link to="/" class="mt-3 ml-auto mr-3">
-        <b-button variant="outline-primary"><p>to Home</p></b-button>
-      </router-link></Header
-    >
+    <Header>
+      <div><p style="font-size: 5rem; font-weight: 700" class="ml-5">Board</p></div>
+      <div>
+        <router-link to="/" class="ml-auto mr-3">
+          <b-button variant="outline-success"><p>Home</p></b-button>
+        </router-link>
+        <router-link to="/register" class="mr-3">
+          <b-button variant="outline-dark"><p>Register</p></b-button>
+        </router-link>
+        <router-link to="/signin" class="mr-3">
+          <b-button variant="outline-warning"><p>Sign in</p></b-button>
+        </router-link>
+      </div>
+    </Header>
     <div class="row">
       <Sidebar id="sidebar" class="col-md-3" />
       <div id="main" class="col-md-9"></div>

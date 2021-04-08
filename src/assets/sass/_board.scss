@@ -9,6 +9,15 @@
   Header {
     width: 100vw;
     height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    button {
+      p {
+        font-size: 2rem;
+        padding: 1rem;
+      }
+    }
   }
   .row {
     width: 100vw;
@@ -33,12 +42,15 @@
     width: 100vw;
     height: 10vh;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     button {
       p {
         font-size: 2rem;
         padding: 1rem;
       }
     }
+    
   }
   .row {
     width: 100vw;
