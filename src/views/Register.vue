@@ -51,8 +51,8 @@
             ></b-form-input>
             <p>
               <small class="text-muted ml-3"
-                >Make sure it's at least 15 characters OR at least 8 characters including a number
-                and a lowercase letter.</small
+                >Make sure it's at least 8 characters including a number and a lowercase
+                letter.</small
               >
             </p>
             <div v-if="errors.length" class="error-message">
