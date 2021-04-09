@@ -55,6 +55,16 @@
                 and a lowercase letter.</small
               >
             </p>
+            <div v-if="errors.length" class="error-message">
+              <ul>
+                <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+              </ul>
+            </div>
+            <div v-else class="error-message" style="opacity: 0">
+              <ul>
+                <li>dummy text</li>
+              </ul>
+            </div>
             <b-button type="submit" variant="primary btn-block">Create account</b-button>
           </b-form>
         </div>
@@ -76,6 +86,7 @@ export default {
       username: '',
       email: '',
       password: '',
+      errors: [],
     };
   },
   components: {
@@ -83,14 +94,36 @@ export default {
   },
   methods: {
     registerUser() {
+      this.errors = [];
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
-          console.log(response.user.email);
+          const user = response.user;
+          firebase
+            .database()
+            .ref('users')
+            .child(user.uid)
+            .set({
+              user_id: user.uid,
+              username: this.username,
+              email: user.email,
+            })
+            .then(() => {
+              this.$router.push('/');
+            })
+            .catch((error) => {
+              this.errors.push(error.message);
+              this.username = '';
+              this.email = '';
+              this.password = '';
+            });
         })
         .catch((error) => {
-          console.error(error.message);
+          this.errors.push(error.message);
+          this.username = '';
+          this.email = '';
+          this.password = '';
         });
     },
   },

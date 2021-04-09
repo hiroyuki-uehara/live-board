@@ -14,12 +14,19 @@
         </router-link>
       </div>
     </Header>
-    <div id="main"></div>
+    <div id="main">
+      <b-button variant="light" @click="signOut">
+        <p>Sign out</p>
+      </b-button>
+    </div>
     <Footer />
   </div>
 </template>
 
 <script>
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
 import Header from '../components/Header.vue';
 import Footer from '../components/Footer.vue';
 
@@ -31,6 +38,12 @@ export default {
   components: {
     Header,
     Footer,
+  },
+  methods: {
+    signOut() {
+      firebase.auth().signOut();
+      this.$router.push('/signin');
+    },
   },
 };
 </script>

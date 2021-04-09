@@ -15,11 +15,17 @@
       </div>
     </Header>
     <div class="row">
-      <Sidebar id="sidebar" class="col-md-3" />
+      <Sidebar
+        id="sidebar"
+        class="col-md-3"
+        :email="user.email"
+        :threads="threads"
+        :users="users"
+      />
       <div id="main" class="col-md-9">
-        <b-button variant="light" @click="signOut">
-          <p>Sign out</p>
-        </b-button>
+        <Info :user="this.user" />
+        <Display />
+        <Editor />
       </div>
     </div>
   </div>
@@ -31,22 +37,69 @@ import 'firebase/auth';
 
 import Header from '../components/Header.vue';
 import Sidebar from '../components/Sidebar.vue';
+import Info from '../components/Info.vue';
+import Display from '../components/Display.vue';
+import Editor from '../components/Editor.vue';
 
 export default {
   name: 'Board',
   data() {
-    return {};
+    return {
+      user: '',
+      users: [
+        {
+          user_id: 1,
+          username: 'Jay Gatsby',
+          email: 'jay@longisland.com',
+          nickname: 'Jay',
+        },
+        {
+          user_id: 2,
+          username: 'Daisy Fay',
+          email: 'daisy@longisland.com',
+          nickname: 'Daisy',
+        },
+        {
+          user_id: 3,
+          username: 'Nick Carraway',
+          email: 'nick@longisland.com',
+          nickname: 'Nick',
+        },
+        {
+          user_id: 4,
+          username: 'Joe Fox',
+          email: 'joe@ny152.com',
+          nickname: 'Joe',
+        },
+      ],
+      threads: [
+        {
+          thread_id: 1,
+          title: 'Medicine',
+        },
+        {
+          thread_id: 2,
+          title: 'Mathematics',
+        },
+        {
+          thread_id: 3,
+          title: 'Physics',
+        },
+      ],
+      comments: [],
+    };
   },
   components: {
     Header,
     Sidebar,
+    Info,
+    Display,
+    Editor,
   },
-  methods: {
-    signOut() {
-      firebase.auth().signOut();
-      this.$router.push('/signin');
-    },
+  mounted() {
+    this.user = firebase.auth().currentUser;
   },
+  methods: {},
 };
 </script>
 

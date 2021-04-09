@@ -1,5 +1,38 @@
 <template>
-  <div id="sidebar"><slot></slot></div>
+  <div id="sidebar">
+    <div>
+      <font-awesome-icon :icon="['fas', 'chalkboard']" style="font-size: 3rem" class="ml-2" />
+      <span class="mr-auto ml-4">Live Board</span>
+    </div>
+    <section>
+      <font-awesome-icon
+        :icon="['fas', 'circle']"
+        style="color: orange; font-size: 1.5rem"
+        class="mr-1"
+      />
+      <span>
+        {{ email }}
+      </span>
+    </section>
+    <div>
+      <p>Threads</p>
+      <p>
+        <font-awesome-icon :icon="['far', 'plus-circle']" class="pt-1 mr-3 text-muted" />
+      </p>
+    </div>
+    <section v-for="thread in threads" :key="thread.thread_id">
+      <font-awesome-icon :icon="['fal', 'question-circle']" style="font-size: 2rem" class="mr-3" />
+      <span>{{ thread.title }}</span>
+    </section>
+    <div><p>Direct Messages</p></div>
+    <section v-for="user in users" :key="user.user_id">
+      <font-awesome-icon
+        :icon="['fas', 'circle']"
+        style="color: orange; font-size: 1.5rem"
+        class="mr-3"
+      /><span>{{ user.username }}</span>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -8,6 +41,12 @@ export default {
   data() {
     return {};
   },
+  props: {
+    email: String,
+    threads: Array,
+    users: Array,
+  },
+
   components: {},
 };
 </script>
@@ -15,4 +54,5 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/sass/reset';
 @import '../assets/sass/background';
+@import '../assets/sass/sidebar';
 </style>
