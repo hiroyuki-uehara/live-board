@@ -11,9 +11,7 @@
         class="mr-1"
       />
       <span
-        ><strong>
-          {{ username }}
-        </strong>
+        ><strong> {{ username }} </strong><span class="ml-3 text-muted">you</span>
       </span>
     </section>
     <div>
@@ -27,7 +25,7 @@
       <span>{{ thread.title }}</span>
     </section>
     <div><p>Direct Messages</p></div>
-    <section v-for="user in users" :key="user.user_id">
+    <section v-for="user in otherUsers" :key="user.user_id">
       <font-awesome-icon
         :icon="['fas', 'circle']"
         style="color: orange; font-size: 1.5rem"
@@ -41,19 +39,15 @@
 export default {
   name: 'Sidebar',
   data() {
-    return {
-      // otherUsers: [],
-    };
+    return {};
   },
   props: {
     username: String,
+    user_id: String,
     threads: Array,
-    users: Array,
+    otherUsers: Array,
   },
   components: {},
-  // mounted() {
-  //   this.otherUsers = this.users;
-  // },
 };
 </script>
 

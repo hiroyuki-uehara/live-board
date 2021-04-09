@@ -20,10 +20,10 @@
         class="col-md-3"
         :username="this.user.username"
         :threads="threads"
-        :users="users"
+        :otherUsers="otherUsers"
       />
       <div id="main" class="col-md-9">
-        <Info :user="this.user" />
+        <Info :username="this.user.username" :email="this.user.email" />
         <Display />
         <Editor />
       </div>
@@ -48,6 +48,7 @@ export default {
     return {
       user: '',
       users: [],
+      otherUsers: [],
       threads: [
         {
           thread_id: 1,
@@ -97,6 +98,16 @@ export default {
       .on('child_added', (snapshot) => {
         this.users.push(snapshot.val());
       });
+
+    firebase
+      .database()
+      .ref('users')
+      .on('child_added', (snapshot) => {
+        if (this.user.username !== snapshot.val().username) {
+          this.otherUsers.push(snapshot.val());
+        }
+      });
+    console.log(this.otherUsers);
   },
   beforeDestroy() {
     firebase.database().ref('users').off();

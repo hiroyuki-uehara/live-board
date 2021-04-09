@@ -1,10 +1,10 @@
 <template>
   <div id="info">
     <div>
-      <v-gravatar :email="user.email" :size="40" default-img="identicon" />
+      <v-gravatar :email="email" :size="40" default-img="identicon" />
     </div>
     <div>
-      <p>{{ user.username }}</p>
+      <p>{{ username }}</p>
     </div>
   </div>
 </template>
@@ -16,7 +16,8 @@ export default {
     return {};
   },
   props: {
-    user: String,
+    username: String,
+    email: String,
   },
   components: {},
 };
