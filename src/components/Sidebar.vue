@@ -10,8 +10,10 @@
         style="color: orange; font-size: 1.5rem"
         class="mr-1"
       />
-      <span>
-        {{ email }}
+      <span
+        ><strong>
+          {{ username }}
+        </strong>
       </span>
     </section>
     <div>
@@ -39,15 +41,19 @@
 export default {
   name: 'Sidebar',
   data() {
-    return {};
+    return {
+      // otherUsers: [],
+    };
   },
   props: {
-    email: String,
+    username: String,
     threads: Array,
     users: Array,
   },
-
   components: {},
+  // mounted() {
+  //   this.otherUsers = this.users;
+  // },
 };
 </script>
 

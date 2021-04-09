@@ -18,7 +18,7 @@
       <Sidebar
         id="sidebar"
         class="col-md-3"
-        :email="user.email"
+        :username="this.user.username"
         :threads="threads"
         :users="users"
       />
@@ -34,6 +34,7 @@
 <script>
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 import Header from '../components/Header.vue';
 import Sidebar from '../components/Sidebar.vue';
@@ -46,32 +47,7 @@ export default {
   data() {
     return {
       user: '',
-      users: [
-        {
-          user_id: 1,
-          username: 'Jay Gatsby',
-          email: 'jay@longisland.com',
-          nickname: 'Jay',
-        },
-        {
-          user_id: 2,
-          username: 'Daisy Fay',
-          email: 'daisy@longisland.com',
-          nickname: 'Daisy',
-        },
-        {
-          user_id: 3,
-          username: 'Nick Carraway',
-          email: 'nick@longisland.com',
-          nickname: 'Nick',
-        },
-        {
-          user_id: 4,
-          username: 'Joe Fox',
-          email: 'joe@ny152.com',
-          nickname: 'Joe',
-        },
-      ],
+      users: [],
       threads: [
         {
           thread_id: 1,
@@ -98,6 +74,32 @@ export default {
   },
   mounted() {
     this.user = firebase.auth().currentUser;
+
+    firebase
+      .database()
+      .ref('users')
+      .child(this.user.uid)
+      .once('value', (snapshot) => {
+        if (snapshot.exists()) {
+          this.user.username = snapshot.val().username;
+          // this.directMessage(this.user);
+        } else {
+          console.log('No data available');
+        }
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+
+    firebase
+      .database()
+      .ref('users')
+      .on('child_added', (snapshot) => {
+        this.users.push(snapshot.val());
+      });
+  },
+  beforeDestroy() {
+    firebase.database().ref('users').off();
   },
   methods: {},
 };

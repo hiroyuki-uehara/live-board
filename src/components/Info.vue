@@ -4,7 +4,7 @@
       <v-gravatar :email="user.email" :size="40" default-img="identicon" />
     </div>
     <div>
-      <p>{{ user.email }}</p>
+      <p>{{ user.username }}</p>
     </div>
   </div>
 </template>

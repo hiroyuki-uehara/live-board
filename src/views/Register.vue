@@ -92,6 +92,7 @@ export default {
   components: {
     Header,
   },
+  computed: {},
   methods: {
     registerUser() {
       this.errors = [];
