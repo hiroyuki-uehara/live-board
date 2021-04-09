@@ -22,11 +22,12 @@
         :threads="threads"
         :otherUsers="otherUsers"
         @email_click="directMessage"
+        @myemail_click="myMessage"
       />
       <div id="main" class="col-md-9">
         <Info :channel="channel" :email="this.user.email" />
         <Display />
-        <Editor @comment_submit="sendMessage" />
+        <Editor @comment_submit="sendMessage" :user="user" :placeholder="placeholder" />
       </div>
     </div>
   </div>
@@ -52,6 +53,7 @@ export default {
       otherUsers: [],
       channel: '',
       comment: '',
+      placeholder: '',
       threads: [
         {
           thread_id: 1,
@@ -84,8 +86,9 @@ export default {
       .child(this.user.uid)
       .once('value', (snapshot) => {
         if (snapshot.exists()) {
+          this.user = snapshot.val();
           this.user.username = snapshot.val().username;
-          this.directMessage(this.user.username);
+          this.directMessage(this.user);
         } else {
           console.log('No data available');
         }
@@ -114,12 +117,16 @@ export default {
     firebase.database().ref('users').off();
   },
   methods: {
-    directMessage(username) {
+    directMessage(user) {
+      this.channel = user.username;
+      this.placeholder = `Message to ${user.username}`;
+    },
+    myMessage(username) {
       this.channel = username;
+      this.placeholder = 'Jot something down';
     },
     sendMessage(comment) {
       this.comment = comment;
-      console.log(this.comment);
     },
   },
 };

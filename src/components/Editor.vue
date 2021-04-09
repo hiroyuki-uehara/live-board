@@ -3,6 +3,7 @@
     <textarea
       v-model="comment"
       @keyup.enter.ctrl.exact="$emit('comment_submit', comment)"
+      :placeholder="placeholder"
     ></textarea>
     <b-button
       @click.prevent="$emit('comment_submit', comment)"
@@ -23,7 +24,9 @@ export default {
       comment: '',
     };
   },
-  props: {},
+  props: {
+    placeholder: String,
+  },
   components: {},
 };
 </script>
