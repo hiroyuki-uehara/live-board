@@ -21,11 +21,12 @@
         :username="this.user.username"
         :threads="threads"
         :otherUsers="otherUsers"
+        @email_click="directMessage"
       />
       <div id="main" class="col-md-9">
-        <Info :username="this.user.username" :email="this.user.email" />
+        <Info :channel="channel" :email="this.user.email" />
         <Display />
-        <Editor />
+        <Editor @comment_submit="sendMessage" />
       </div>
     </div>
   </div>
@@ -49,6 +50,8 @@ export default {
       user: '',
       users: [],
       otherUsers: [],
+      channel: '',
+      comment: '',
       threads: [
         {
           thread_id: 1,
@@ -63,7 +66,6 @@ export default {
           title: 'Physics',
         },
       ],
-      comments: [],
     };
   },
   components: {
@@ -83,7 +85,7 @@ export default {
       .once('value', (snapshot) => {
         if (snapshot.exists()) {
           this.user.username = snapshot.val().username;
-          // this.directMessage(this.user);
+          this.directMessage(this.user.username);
         } else {
           console.log('No data available');
         }
@@ -107,12 +109,19 @@ export default {
           this.otherUsers.push(snapshot.val());
         }
       });
-    console.log(this.otherUsers);
   },
   beforeDestroy() {
     firebase.database().ref('users').off();
   },
-  methods: {},
+  methods: {
+    directMessage(username) {
+      this.channel = username;
+    },
+    sendMessage(comment) {
+      this.comment = comment;
+      console.log(this.comment);
+    },
+  },
 };
 </script>
 

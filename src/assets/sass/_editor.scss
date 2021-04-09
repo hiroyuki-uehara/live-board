@@ -8,11 +8,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
     textarea {
       resize: none;
       width: 74vw;
       height: 18vh;
       border-radius: 0.3rem;
+      padding: 2rem;
+      font-size: 2.6rem;
+      overflow-y: auto;
+    }
+    .reply-button {
+      position: absolute;
+      bottom: 2vh;
+      right: 1vw;
+      width: 8vw;
+      height: 6vh;
+      font-size: 3rem;
+      font-weight: bold;
     }
   }
 }

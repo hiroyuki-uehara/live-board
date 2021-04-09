@@ -4,7 +4,7 @@
       <font-awesome-icon :icon="['fas', 'chalkboard']" style="font-size: 3rem" class="ml-2" />
       <span class="mr-auto ml-4">Live Board</span>
     </div>
-    <section>
+    <section @click="$emit('email_click', username)">
       <font-awesome-icon
         :icon="['fas', 'circle']"
         style="color: orange; font-size: 1.5rem"
@@ -25,7 +25,11 @@
       <span>{{ thread.title }}</span>
     </section>
     <div><p>Direct Messages</p></div>
-    <section v-for="user in otherUsers" :key="user.user_id">
+    <section
+      v-for="user in otherUsers"
+      :key="user.user_id"
+      @click="$emit('email_click', user.username)"
+    >
       <font-awesome-icon
         :icon="['fas', 'circle']"
         style="color: orange; font-size: 1.5rem"
@@ -39,7 +43,9 @@
 export default {
   name: 'Sidebar',
   data() {
-    return {};
+    return {
+      channel: '',
+    };
   },
   props: {
     username: String,

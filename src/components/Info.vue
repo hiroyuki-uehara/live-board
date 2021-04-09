@@ -4,7 +4,7 @@
       <v-gravatar :email="email" :size="40" default-img="identicon" />
     </div>
     <div>
-      <p>{{ username }}</p>
+      <p>{{ channel }}</p>
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
     return {};
   },
   props: {
-    username: String,
+    channel: String,
     email: String,
   },
   components: {},
