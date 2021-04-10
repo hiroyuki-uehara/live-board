@@ -32,6 +32,7 @@
           </div>
           <div>
             <p>{{ room }}</p>
+            <span>{{ comment }}</span>
           </div>
         </div>
         <!-- </Info> -->
@@ -62,23 +63,29 @@
 
         <!-- <Editor> -->
         <div id="editor">
-          <textarea
-            v-model="comment"
-            @keyup.enter.ctrl.exact="sendMessage(comment)"
-            :placeholder="placeholder"
-          ></textarea>
-          <b-button @click.prevent="clearComment" variant="outline-secondary" class="clear-button">
-            <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 3rem" class="mr-3" />
-            <span>Clear</span>
-          </b-button>
-          <b-button
-            @click.prevent="sendMessage(comment)"
-            variant="outline-success"
-            class="reply-button"
-          >
-            <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 3rem" class="mr-3" />
-            <span>Reply</span>
-          </b-button>
+          <form>
+            <textarea
+              v-model="comment"
+              :placeholder="placeholder"
+              @keyup.enter.ctrl.exact.prevent="sendMessage(comment)"
+            ></textarea>
+            <b-button
+              @click.prevent="clearComment"
+              variant="outline-secondary"
+              class="clear-button"
+            >
+              <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 3rem" class="mr-3" />
+              <span>Clear</span>
+            </b-button>
+            <b-button
+              @click.prevent="sendMessage(comment)"
+              variant="outline-success"
+              class="reply-button"
+            >
+              <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 3rem" class="mr-3" />
+              <span>Reply</span>
+            </b-button>
+          </form>
         </div>
         <!-- </Editor> -->
       </div>
@@ -177,6 +184,10 @@ export default {
         this.room_id = `${user.user_id}-${this.user.uid}`;
       }
 
+      if (this.room_id !== '') {
+        firebase.database().ref('comments').child(this.room_id).off();
+      }
+
       this.room = user.username;
       this.email = user.email;
       this.placeholder = `Message to ${user.username}`;
@@ -195,6 +206,10 @@ export default {
       this.room = username;
       this.placeholder = 'Jot something down';
 
+      if (this.room_id !== '') {
+        firebase.database().ref('comments').child(this.room_id).off();
+      }
+
       this.room_id = this.user.uid;
 
       firebase
@@ -204,9 +219,18 @@ export default {
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
         });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.user.uid)
+        .on('child_removed', (snapshot) => {
+          this.comments.push(snapshot.val());
+        });
     },
     sendMessage(comment) {
       this.comment = comment;
+      console.log(this.comment);
 
       const newComment = firebase.database().ref('comments').child(this.room_id).push();
 
@@ -223,8 +247,19 @@ export default {
       this.comment = '';
     },
     deleteComment(comment) {
-      console.log(this.room_id);
-      firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).remove();
+      if (window.confirm('Do you really want to delete this comment?')) {
+        firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).remove();
+
+        firebase
+          .database()
+          .ref('comments')
+          .child(this.room_id)
+          .once('value', (snapshot) => {
+            this.comments = snapshot.val();
+          });
+      } else {
+        return;
+      }
     },
   },
 };
