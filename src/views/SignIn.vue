@@ -63,8 +63,7 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.usernameOrEmail, this.password)
-        .then((response) => {
-          console.log(response.user.email);
+        .then(() => {
           this.$router.push('/board');
         })
         .catch((error) => {

@@ -25,8 +25,8 @@
         @myemail_click="myMessage"
       />
       <div id="main" class="col-md-9">
-        <Info :channel="channel" :email="this.user.email" />
-        <Display />
+        <Info :room="room" :email="this.user.email" />
+        <Display :comments="comments" :room_id="room_id" />
         <Editor @comment_submit="sendMessage" :user="user" :placeholder="placeholder" />
       </div>
     </div>
@@ -51,8 +51,10 @@ export default {
       user: '',
       users: [],
       otherUsers: [],
-      channel: '',
+      room: '',
+      room_id: '',
       comment: '',
+      comments: [],
       placeholder: '',
       threads: [
         {
@@ -86,9 +88,8 @@ export default {
       .child(this.user.uid)
       .once('value', (snapshot) => {
         if (snapshot.exists()) {
-          this.user = snapshot.val();
           this.user.username = snapshot.val().username;
-          this.directMessage(this.user);
+          this.myMessage(this.user.username);
         } else {
           console.log('No data available');
         }
@@ -118,15 +119,57 @@ export default {
   },
   methods: {
     directMessage(user) {
-      this.channel = user.username;
+      this.comments = [];
+
+      if (this.user.uid > user.user_id) {
+        this.room_id = `${this.user.uid}-${user.user_id}`;
+      } else {
+        this.room_id = `${user.user_id}-${this.user.uid}`;
+      }
+
+      this.room = user.username;
       this.placeholder = `Message to ${user.username}`;
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_added', (snapshot) => {
+          this.comments.push(snapshot.val());
+        });
     },
     myMessage(username) {
-      this.channel = username;
+      this.comments = [];
+
+      this.room = username;
       this.placeholder = 'Jot something down';
+
+      this.room_id = this.user.uid;
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.user.uid)
+        .on('child_added', (snapshot) => {
+          this.comments.push(snapshot.val());
+        });
     },
     sendMessage(comment) {
       this.comment = comment;
+
+      const newComment = firebase.database().ref('comments').child(this.room_id).push();
+
+      const comment_id = newComment.key;
+
+      newComment.set({
+        comment_id,
+        content: this.comment,
+        username: this.user.username,
+        email: this.user.email,
+        createdAt: firebase.database.ServerValue.TIMESTAMP,
+      });
+
+      this.comment = '';
     },
   },
 };
