@@ -20,11 +20,53 @@
         class="col-md-3"
         :username="this.user.username"
         :threads="threads"
+        :thread_title="thread_title"
         :otherUsers="otherUsers"
-        @email_click="directMessage"
-        @myemail_click="myMessage"
+        @myusername_clicked="myMessage"
+        @username_clicked="directMessage"
+        @plus_clicked="showThreadModal"
+        @threadtitle_clicked="activateThread"
       />
       <div id="main" class="col-md-9">
+        <!-- <Thread> -->
+        <div id="thread" v-show="threadModal" @click="closeThreadModal">
+          <div id="thread-wrapper" @click.stop>
+            <font-awesome-icon
+              :icon="['far', 'window-close']"
+              class="modal-icon text-muted"
+              @click="closeThreadModal"
+            />
+            <p>Type in your new thread title and its contetnt.</p>
+            <b-form id="thread-box" @submit.prevent="">
+              <label for="thread_title">Thread title</label>
+              <b-form-input
+                id="thread_title"
+                type="text"
+                class="thread-input"
+                required
+                v-model="thread_title"
+              ></b-form-input>
+
+              <label for="thread_content">Thread content</label>
+              <b-form-input
+                id="thread_content"
+                type="text"
+                class="thread-input"
+                required
+                v-model="thread_content"
+              ></b-form-input>
+              <b-button block variant="primary" size="lg" type="submit" @click="addThread"
+                >Create thread</b-button
+              >
+            </b-form>
+          </div>
+        </div>
+        <!-- </Thread> -->
+
+        <!-- <Edit> -->
+        <div id="edit"></div>
+        <!-- </Edit> -->
+
         <!-- <Info> -->
         <div id="info">
           <div>
@@ -32,7 +74,6 @@
           </div>
           <div>
             <p>{{ room }}</p>
-            <span>{{ comment }}</span>
           </div>
         </div>
         <!-- </Info> -->
@@ -41,16 +82,18 @@
         <div id="display">
           <div class="comment" v-for="(comment, index) in comments" :key="index">
             <span class="display-icon">
-              <span>
-                <font-awesome-icon :icon="['far', 'edit']" style="cursor: pointer" class="mr-3" />
-              </span>
-              <span @click="deleteComment(comment)">
-                <font-awesome-icon
-                  :icon="['fal', 'trash-alt']"
-                  style="cursor: pointer"
-                  class="mr-3"
-                />
-              </span>
+              <template v-if="isUser(comment)">
+                <span>
+                  <font-awesome-icon :icon="['far', 'edit']" style="cursor: pointer" class="mr-3" />
+                </span>
+                <span @click="deleteComment(comment)">
+                  <font-awesome-icon
+                    :icon="['fal', 'trash-alt']"
+                    style="cursor: pointer"
+                    class="mr-3"
+                  />
+                </span>
+              </template>
             </span>
             <div><v-gravatar :email="comment.email" :size="80" default-img="identicon" /></div>
             <div>
@@ -114,20 +157,11 @@ export default {
       comments: [],
       email: '',
       placeholder: '',
-      threads: [
-        {
-          thread_id: 1,
-          title: 'Medicine',
-        },
-        {
-          thread_id: 2,
-          title: 'Mathematics',
-        },
-        {
-          thread_id: 3,
-          title: 'Physics',
-        },
-      ],
+      thread_id: '',
+      thread_title: '',
+      thread_content: '',
+      threads: [],
+      threadModal: false,
     };
   },
   components: {
@@ -136,7 +170,6 @@ export default {
   },
   mounted() {
     this.user = firebase.auth().currentUser;
-    this.email = this.user.email;
 
     firebase
       .database()
@@ -169,12 +202,70 @@ export default {
           this.otherUsers.push(snapshot.val());
         }
       });
+
+    firebase
+      .database()
+      .ref('threads')
+      .on('child_added', (snapshot) => {
+        this.threads.push(snapshot.val());
+      });
   },
   beforeDestroy() {
     firebase.database().ref('users').off();
-    firebase.database().ref('comments').off();
+    firebase.database().ref('comments').child(this.room_id).off();
   },
   methods: {
+    activateThread(thread) {
+      this.comments = [];
+      this.room_id = thread.thread_id;
+
+      if (this.room_id !== '') {
+        firebase.database().ref('threads').child(this.room_id).off();
+      }
+
+      this.room = thread.thread_title;
+      this.email = this.user.email;
+      this.placeholder = `Comment on ${thread.thread_title}, please`;
+
+      firebase
+        .database()
+        .ref('threads')
+        .child(this.room_id)
+        .on('child_added', (snapshot) => {
+          this.comments.push(snapshot.val());
+        });
+    },
+    addThread() {
+      const newThread = firebase.database().ref('threads').push();
+
+      const thread_id = newThread.key;
+
+      newThread
+        .set({
+          thread_id,
+          thread_title: this.thread_title,
+          thread_content: this.thread_content,
+        })
+        .then(() => {
+          this.threadModal = false;
+        });
+
+      this.thread_title = '';
+      this.thread_content = '';
+    },
+    showThreadModal() {
+      this.threadModal = true;
+    },
+    closeThreadModal() {
+      this.threadModal = false;
+    },
+    isUser(comment) {
+      if (comment.username === this.user.username) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     directMessage(user) {
       this.comments = [];
 
@@ -204,6 +295,7 @@ export default {
       this.comments = [];
 
       this.room = username;
+      this.email = this.user.email;
       this.placeholder = 'Jot something down';
 
       if (this.room_id !== '') {
@@ -261,6 +353,10 @@ export default {
         return;
       }
     },
+    clearComment() {
+      this.comment = '';
+      return this.comment;
+    },
   },
 };
 </script>
@@ -272,4 +368,6 @@ export default {
 @import '../assets/sass/info';
 @import '../assets/sass/display';
 @import '../assets/sass/editor';
+@import '../assets/sass/thread';
+@import '../assets/sass/edit';
 </style>

@@ -4,7 +4,7 @@
       <font-awesome-icon :icon="['fas', 'chalkboard']" style="font-size: 3rem" class="ml-2" />
       <span class="mr-auto ml-4">Live Board</span>
     </div>
-    <section @click="$emit('myemail_click', username)">
+    <section @click="$emit('myusername_clicked', username)">
       <font-awesome-icon
         :icon="['fas', 'circle']"
         style="color: orange; font-size: 1.5rem"
@@ -16,16 +16,25 @@
     </section>
     <div>
       <p>Threads</p>
-      <p>
+      <p @click="$emit('plus_clicked')">
         <font-awesome-icon :icon="['far', 'plus-circle']" class="pt-1 mr-3 text-muted" />
       </p>
     </div>
-    <section v-for="thread in threads" :key="thread.thread_id">
+    <section
+      v-for="thread in threads"
+      :key="thread.thread_id"
+      @click="$emit('threadtitle_clicked', thread)"
+    >
       <font-awesome-icon :icon="['fal', 'question-circle']" style="font-size: 2rem" class="mr-3" />
-      <span>{{ thread.title }}</span>
+      <span>{{ thread.thread_title }}</span>
     </section>
+
     <div><p>Direct Messages</p></div>
-    <section v-for="user in otherUsers" :key="user.user_id" @click="$emit('email_click', user)">
+    <section
+      v-for="user in otherUsers"
+      :key="user.user_id"
+      @click="$emit('username_clicked', user)"
+    >
       <font-awesome-icon
         :icon="['fas', 'circle']"
         style="color: orange; font-size: 1.5rem"
@@ -46,6 +55,7 @@ export default {
   props: {
     username: String,
     user_id: String,
+    thread_title: String,
     threads: Array,
     otherUsers: Array,
   },
