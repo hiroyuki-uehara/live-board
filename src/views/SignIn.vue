@@ -24,12 +24,23 @@
             <b-form-input
               id="input-password"
               type="password"
+              autocomplete="on"
               class="auth-input"
               required
               v-model="password"
             ></b-form-input>
 
             <b-button type="submit" variant="success btn-block">Sign in</b-button>
+            <div v-if="errors.length" class="error-message">
+              <ul>
+                <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+              </ul>
+            </div>
+            <div v-else class="error-message" style="opacity: 0">
+              <ul>
+                <li>dummy text</li>
+              </ul>
+            </div>
           </b-form>
           <div>
             <p>
@@ -55,6 +66,7 @@ export default {
     return {
       usernameOrEmail: '',
       password: '',
+      errors: [],
     };
   },
   components: {},
@@ -67,7 +79,9 @@ export default {
           this.$router.push('/board');
         })
         .catch((error) => {
-          console.error(error.message);
+          this.errors.push(error.message);
+          this.usernameOrEmail = '';
+          this.password = '';
         });
     },
   },

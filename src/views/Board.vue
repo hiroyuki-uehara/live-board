@@ -25,9 +25,62 @@
         @myemail_click="myMessage"
       />
       <div id="main" class="col-md-9">
-        <Info :room="room" :email="this.user.email" />
-        <Display :comments="comments" :room_id="room_id" />
-        <Editor @comment_submit="sendMessage" :user="user" :placeholder="placeholder" />
+        <!-- <Info> -->
+        <div id="info">
+          <div>
+            <v-gravatar :email="email" :size="40" default-img="identicon" />
+          </div>
+          <div>
+            <p>{{ room }}</p>
+          </div>
+        </div>
+        <!-- </Info> -->
+
+        <!-- <Display> -->
+        <div id="display">
+          <div class="comment" v-for="(comment, index) in comments" :key="index">
+            <span class="display-icon">
+              <span>
+                <font-awesome-icon :icon="['far', 'edit']" style="cursor: pointer" class="mr-3" />
+              </span>
+              <span @click="deleteComment(comment)">
+                <font-awesome-icon
+                  :icon="['fal', 'trash-alt']"
+                  style="cursor: pointer"
+                  class="mr-3"
+                />
+              </span>
+            </span>
+            <div><v-gravatar :email="comment.email" :size="80" default-img="identicon" /></div>
+            <div>
+              <h1>{{ comment.username }}</h1>
+              <p>{{ comment.content }}</p>
+            </div>
+          </div>
+        </div>
+        <!-- </Display> -->
+
+        <!-- <Editor> -->
+        <div id="editor">
+          <textarea
+            v-model="comment"
+            @keyup.enter.ctrl.exact="sendMessage(comment)"
+            :placeholder="placeholder"
+          ></textarea>
+          <b-button @click.prevent="clearComment" variant="outline-secondary" class="clear-button">
+            <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 3rem" class="mr-3" />
+            <span>Clear</span>
+          </b-button>
+          <b-button
+            @click.prevent="sendMessage(comment)"
+            variant="outline-success"
+            class="reply-button"
+          >
+            <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 3rem" class="mr-3" />
+            <span>Reply</span>
+          </b-button>
+        </div>
+        <!-- </Editor> -->
       </div>
     </div>
   </div>
@@ -40,9 +93,6 @@ import 'firebase/database';
 
 import Header from '../components/Header.vue';
 import Sidebar from '../components/Sidebar.vue';
-import Info from '../components/Info.vue';
-import Display from '../components/Display.vue';
-import Editor from '../components/Editor.vue';
 
 export default {
   name: 'Board',
@@ -55,6 +105,7 @@ export default {
       room_id: '',
       comment: '',
       comments: [],
+      email: '',
       placeholder: '',
       threads: [
         {
@@ -75,12 +126,10 @@ export default {
   components: {
     Header,
     Sidebar,
-    Info,
-    Display,
-    Editor,
   },
   mounted() {
     this.user = firebase.auth().currentUser;
+    this.email = this.user.email;
 
     firebase
       .database()
@@ -116,6 +165,7 @@ export default {
   },
   beforeDestroy() {
     firebase.database().ref('users').off();
+    firebase.database().ref('comments').off();
   },
   methods: {
     directMessage(user) {
@@ -128,6 +178,7 @@ export default {
       }
 
       this.room = user.username;
+      this.email = user.email;
       this.placeholder = `Message to ${user.username}`;
 
       firebase
@@ -171,6 +222,10 @@ export default {
 
       this.comment = '';
     },
+    deleteComment(comment) {
+      console.log(this.room_id);
+      firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).remove();
+    },
   },
 };
 </script>
@@ -179,4 +234,7 @@ export default {
 @import '../assets/sass/reset';
 @import '../assets/sass/background';
 @import '../assets/sass/board';
+@import '../assets/sass/info';
+@import '../assets/sass/display';
+@import '../assets/sass/editor';
 </style>
