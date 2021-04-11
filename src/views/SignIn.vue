@@ -31,18 +31,22 @@
               required
               v-model="password"
             ></b-form-input>
-
-            <b-button type="submit" variant="success btn-block">Sign in</b-button>
             <div v-if="errors.length" class="error-message">
               <ul>
                 <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
               </ul>
+              <font-awesome-icon
+                :icon="['fal', 'check-square']"
+                class="ml-3 hide-button"
+                @click="hideError"
+              />
             </div>
             <div v-else class="error-message" style="opacity: 0">
               <ul>
                 <li>dummy text</li>
               </ul>
             </div>
+            <b-button type="submit" variant="success btn-block">Sign in</b-button>
           </b-form>
           <div>
             <p>
@@ -67,24 +71,50 @@ export default {
   data() {
     return {
       usernameOrEmail: '',
+      email: '',
       password: '',
+      users: [],
       errors: [],
     };
   },
   components: {},
+  mounted() {
+    firebase
+      .database()
+      .ref('users')
+      .on('child_added', (snapshot) => {
+        this.users.push(snapshot.val());
+      });
+  },
+  beforeDestroy() {
+    firebase.database().ref('users').off();
+  },
   methods: {
     signIn() {
+      let user = this.users.find((user) => user.username === this.usernameOrEmail);
+      if (user) {
+        this.email = user.email;
+      } else {
+        this.email = this.usernameOrEmail;
+      }
+
+      this.errors = [];
+
       firebase
         .auth()
-        .signInWithEmailAndPassword(this.usernameOrEmail, this.password)
+        .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
           this.$router.push('/board');
+          firebase.database().ref('users').off();
         })
         .catch((error) => {
           this.errors.push(error.message);
           this.usernameOrEmail = '';
           this.password = '';
         });
+    },
+    hideError() {
+      this.errors = [];
     },
   },
 };

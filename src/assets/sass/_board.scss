@@ -43,8 +43,13 @@
       font-weight: 700;
     }
     button {
+      width: 9vw;
+      height: 8vh;
+      display:flex;
+      align-items: center;
+      margin: 1.8rem 2rem 0 0;
       p {
-        font-size: 1.4rem;
+        font-size: 1.8rem;
         padding: 0.8rem;
       }
     }

@@ -12,9 +12,10 @@
     .comment {
       background-color: snow;
       width: 72vw;
-      height: 14vh;
-      margin: 0.5rem 1rem 1rem 2rem;
-      padding: 0.5rem 3rem;
+      height: 13vh;
+      font-size: 2rem;
+      margin: 0rem 1rem 1rem 1rem;
+      padding: 0.5rem 3rem 0.5rem 2rem;
       border-radius: 0.3rem;
       display: flex;
       align-items: center;
@@ -31,12 +32,12 @@
         margin: 0;
         padding: 0;
         h1 {
-          font-size: 2rem;
+          font-size: 1.8rem;
           margin-left: 2rem;
           margin-bottom: 1rem;
         }
         p {
-          font-size: 3rem;
+          font-size: 2.8rem;
           margin-left: 2rem;
         }
       }

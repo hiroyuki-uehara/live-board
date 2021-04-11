@@ -3,14 +3,13 @@
     <Header>
       <div><p class="header-title ml-5">Board</p></div>
       <div>
-        <router-link to="/" class="ml-auto mr-3">
-          <b-button variant="outline-success"><p>Home</p></b-button>
-        </router-link>
-        <router-link to="/register" class="mr-3">
-          <b-button variant="outline-dark"><p>Register</p></b-button>
-        </router-link>
-        <router-link to="/signin" class="mr-3">
-          <b-button variant="outline-warning"><p>Sign in</p></b-button>
+        <router-link to="/" class="ml-auto mr-3" style="text-decoration: none">
+          <b-button variant="outline-success">
+            <p>
+              <font-awesome-icon :icon="['fas', 'home-alt']" />
+            </p>
+            <p>Home</p></b-button
+          >
         </router-link>
       </div>
     </Header>
@@ -322,6 +321,10 @@ export default {
         .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
+          this.$nextTick(() => {
+            let display_bottom = document.getElementById('display');
+            display_bottom.scrollTop = display_bottom.scrollHeight;
+          });
         });
       firebase
         .database()
@@ -387,6 +390,10 @@ export default {
         .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
+          this.$nextTick(() => {
+            let display_bottom = document.getElementById('display');
+            display_bottom.scrollTop = display_bottom.scrollHeight;
+          });
         });
       firebase
         .database()
@@ -426,6 +433,10 @@ export default {
         .on('child_removed', (snapshot) => {
           this.comments.push(snapshot.val());
         });
+      this.$nextTick(() => {
+        let display_bottom = document.getElementById('display');
+        display_bottom.scrollTop = display_bottom.scrollHeight;
+      });
     },
     sendMessage(comment) {
       this.comment = comment;

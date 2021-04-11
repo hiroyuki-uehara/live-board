@@ -1,6 +1,7 @@
 <template>
   <div>
     <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 3rem" class="ml-2" />
+    <font-awesome-icon :icon="['fas', 'home-alt']" />
     <font-awesome-icon :icon="['far', 'edit']" />
     <font-awesome-icon :icon="['fab', 'github']" />
     <font-awesome-icon :icon="['far', 'bell']" />
