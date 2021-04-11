@@ -9,24 +9,17 @@
         <router-link to="/register" class="my-auto mr-3">
           <b-button variant="outline-dark"><p>Register</p></b-button>
         </router-link>
-        <router-link to="/register" class="my-auto mr-3">
+        <router-link to="/signin" class="my-auto mr-3">
           <b-button variant="outline-warning"><p>Sign in</p></b-button>
         </router-link>
       </div>
     </Header>
-    <div id="main">
-      <b-button variant="light" @click="signOut">
-        <p>Sign out</p>
-      </b-button>
-    </div>
+    <div id="main"></div>
     <Footer />
   </div>
 </template>
 
 <script>
-import firebase from 'firebase/app';
-import 'firebase/auth';
-
 import Header from '../components/Header.vue';
 import Footer from '../components/Footer.vue';
 
@@ -39,12 +32,7 @@ export default {
     Header,
     Footer,
   },
-  methods: {
-    signOut() {
-      firebase.auth().signOut();
-      this.$router.push('/signin');
-    },
-  },
+  methods: {},
 };
 </script>
 

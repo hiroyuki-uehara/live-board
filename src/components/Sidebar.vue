@@ -35,11 +35,21 @@
       :key="user.user_id"
       @click="$emit('username_clicked', user)"
     >
-      <font-awesome-icon
-        :icon="['fas', 'circle']"
-        style="color: orange; font-size: 1.5rem"
-        class="mr-3"
-      /><span>{{ user.username }}</span>
+      <span v-if="isOnline(user)">
+        <font-awesome-icon
+          :icon="['fas', 'circle']"
+          style="color: orange; font-size: 1.5rem"
+          class="mr-3"
+        />
+      </span>
+      <span v-else>
+        <font-awesome-icon
+          :icon="['fas', 'circle']"
+          style="color: gray; font-size: 1.5rem"
+          class="mr-3"
+        />
+      </span>
+      <span>{{ user.username }}</span>
     </section>
   </div>
 </template>
@@ -60,6 +70,15 @@ export default {
     otherUsers: Array,
   },
   components: {},
+  methods: {
+    isOnline(user) {
+      if (user.status === 'online') {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
 };
 </script>
 

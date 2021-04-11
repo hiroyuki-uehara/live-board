@@ -44,9 +44,9 @@
           </b-form>
           <div>
             <p>
-              New to Live Board?
-              <router-link to="/register"
-                ><span class="ml-2"> Create an account. </span>
+              <span>New to Live Board? </span>
+              <router-link to="/register">
+                <span class="ml-2">Create an account. </span>
               </router-link>
             </p>
           </div>

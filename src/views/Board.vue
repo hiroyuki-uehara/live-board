@@ -81,6 +81,11 @@
             <p style="font-weight: bold">{{ room }}</p>
             <p>{{ thread_content }}</p>
           </div>
+          <div class="ml-auto">
+            <b-button variant="outline-light" @click="signOut">
+              <span>Sign out</span>
+            </b-button>
+          </div>
         </div>
         <!-- </Info> -->
 
@@ -168,6 +173,9 @@ export default {
       thread_content: '',
       threads: [],
       threadModal: false,
+      connectionRef: firebase.database().ref('connections'),
+      connection_id: '',
+      connections: [],
     };
   },
   components: {
@@ -197,7 +205,14 @@ export default {
       .database()
       .ref('users')
       .on('child_added', (snapshot) => {
-        this.users.push(snapshot.val());
+        let user = snapshot.val();
+
+        if (this.user.uid === user.user_id) {
+          user.status = 'online';
+        } else {
+          user.status = 'offline';
+        }
+        this.users.push(user);
       });
 
     firebase
@@ -215,10 +230,41 @@ export default {
       .on('child_added', (snapshot) => {
         this.threads.push(snapshot.val());
       });
+
+    firebase
+      .database()
+      .ref('.info/connected')
+      .on('value', (snapshot) => {
+        if (snapshot.val()) {
+          let ref = this.connectionRef.push();
+          this.connection_id = ref.key;
+          ref.onDisconnect().remove();
+
+          ref.set({
+            user_id: this.user.uid,
+            connection_id: this.connection_id,
+          });
+        }
+      });
+
+    firebase
+      .database()
+      .ref('connections')
+      .on('child_added', (snapshot) => {
+        let new_connection = snapshot.val();
+        this.connections.push(new_connection);
+        let user = this.otherUsers.find((user) => user.user_id === new_connection.user_id);
+        console.log(user);
+        if (user != undefined) {
+          user.status = 'online';
+        }
+      });
   },
   beforeDestroy() {
     firebase.database().ref('users').off();
     firebase.database().ref('comments').child(this.room_id).off();
+    firebase.database().ref('threads').off();
+    firebase.database().ref('.info/connected').off();
   },
   methods: {
     activateThread(thread) {
@@ -365,6 +411,11 @@ export default {
     clearComment() {
       this.comment = '';
       return this.comment;
+    },
+    signOut() {
+      this.connectionRef.child(this.connection_id).remove();
+      firebase.auth().signOut();
+      this.$router.push('/signin');
     },
   },
 };
