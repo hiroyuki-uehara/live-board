@@ -424,6 +424,10 @@ export default {
         .child(this.user.uid)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
+          this.$nextTick(() => {
+            let display_bottom = document.getElementById('display');
+            display_bottom.scrollTop = display_bottom.scrollHeight;
+          });
         });
 
       firebase
@@ -433,10 +437,6 @@ export default {
         .on('child_removed', (snapshot) => {
           this.comments.push(snapshot.val());
         });
-      this.$nextTick(() => {
-        let display_bottom = document.getElementById('display');
-        display_bottom.scrollTop = display_bottom.scrollHeight;
-      });
     },
     sendMessage(comment) {
       this.comment = comment;
