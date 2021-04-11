@@ -2,9 +2,11 @@
   <div class="container">
     <div id="main">
       <div id="auth-box">
-        <div class="text-center">
-          <font-awesome-icon :icon="['fas', 'chalkboard']" style="font-size: 4rem" />
-        </div>
+        <router-link to="/register">
+          <div class="text-center text-muted">
+            <font-awesome-icon :icon="['fas', 'chalkboard']" style="font-size: 4rem" />
+          </div>
+        </router-link>
         <h1 class="text-center text-muted my-3">
           Sign in to
           <strong> Live Board </strong>

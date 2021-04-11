@@ -6,11 +6,8 @@
         <router-link to="/" class="my-auto ml-auto mr-3">
           <b-button variant="outline-success"><p>Home</p></b-button>
         </router-link>
-        <router-link to="/board" class="my-auto mr-3">
-          <b-button variant="outline-primary"><p>Board</p></b-button>
-        </router-link>
         <router-link to="/signin" class="my-auto mr-3">
-          <b-button variant="outline-warning"><p>Sign in</p></b-button>
+          <b-button variant="outline-secondary"><p>Sign in</p></b-button>
         </router-link>
       </div>
     </Header>

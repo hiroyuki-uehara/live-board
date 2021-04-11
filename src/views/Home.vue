@@ -3,14 +3,11 @@
     <Header>
       <div><p class="header-title ml-5">Home</p></div>
       <div>
-        <router-link to="/board" class="my-auto ml-auto mr-3">
-          <b-button variant="outline-primary"><p>Board</p></b-button>
+        <router-link to="/signin" class="my-auto ml-auto mr-3">
+          <b-button variant="outline-secondary" style="border: none"><p>Sign in</p></b-button>
         </router-link>
-        <router-link to="/register" class="my-auto mr-3">
-          <b-button variant="outline-dark"><p>Register</p></b-button>
-        </router-link>
-        <router-link to="/signin" class="my-auto mr-3">
-          <b-button variant="outline-warning"><p>Sign in</p></b-button>
+        <router-link to="/register" class="my-auto ml-3 mr-3">
+          <b-button variant="outline-dark"><p>Sign up</p></b-button>
         </router-link>
       </div>
     </Header>

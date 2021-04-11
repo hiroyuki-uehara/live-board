@@ -21,12 +21,28 @@
         :username="this.user.username"
         :threads="threads"
         :thread_title="thread_title"
-        :otherUsers="otherUsers"
         @myusername_clicked="myMessage"
-        @username_clicked="directMessage"
         @plus_clicked="showThreadModal"
         @thread_clicked="activateThread"
-      />
+      >
+        <section v-for="user in otherUsers" :key="user.user_id" @click="directMessage(user)">
+          <span v-if="isOnline(user)">
+            <font-awesome-icon
+              :icon="['fas', 'circle']"
+              style="color: orange; font-size: 1.5rem"
+              class="mr-3"
+            />
+          </span>
+          <span v-else>
+            <font-awesome-icon
+              :icon="['fas', 'circle']"
+              style="color: gray; font-size: 1.5rem"
+              class="mr-3"
+            />
+          </span>
+          <span>{{ user.username }}</span>
+        </section>
+      </Sidebar>
       <div id="main" class="col-md-9">
         <!-- <Thread> -->
         <div id="thread" v-show="threadModal" @click="closeThreadModal">
@@ -254,9 +270,28 @@ export default {
         let new_connection = snapshot.val();
         this.connections.push(new_connection);
         let user = this.otherUsers.find((user) => user.user_id === new_connection.user_id);
-        console.log(user);
-        if (user != undefined) {
+        if (user) {
           user.status = 'online';
+        }
+      });
+
+    firebase
+      .database()
+      .ref('connections')
+      .on('child_removed', (snapshot) => {
+        let remove_connection = snapshot.val();
+
+        this.connections = this.connections.filter((connection) => {
+          return connection.connection_id !== remove_connection.connection_id;
+        });
+
+        let index = this.connections.findIndex((connection) => {
+          return connection.user_id === remove_connection.user_id;
+        });
+
+        if (index === -1) {
+          let user = this.otherUsers.find((user) => user.user_id === remove_connection.user_id);
+          user.status = 'offline';
         }
       });
   },
@@ -287,6 +322,13 @@ export default {
         .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
+        });
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_removed', () => {
+          console.log('child removed');
         });
     },
     addThread() {
@@ -345,6 +387,15 @@ export default {
         .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
+        });
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_removed', (snapshot) => {
+          this.comments.filter((comment) => {
+            comment.comment_id !== snapshot.val().comment_id;
+          });
         });
     },
     myMessage(username) {
@@ -411,6 +462,13 @@ export default {
     clearComment() {
       this.comment = '';
       return this.comment;
+    },
+    isOnline(user) {
+      if (user.status === 'online') {
+        return true;
+      } else {
+        return false;
+      }
     },
     signOut() {
       this.connectionRef.child(this.connection_id).remove();
