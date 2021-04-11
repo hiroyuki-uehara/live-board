@@ -25,7 +25,7 @@
         @myusername_clicked="myMessage"
         @username_clicked="directMessage"
         @plus_clicked="showThreadModal"
-        @threadtitle_clicked="activateThread"
+        @thread_clicked="activateThread"
       />
       <div id="main" class="col-md-9">
         <!-- <Thread> -->
@@ -36,9 +36,11 @@
               class="modal-icon text-muted"
               @click="closeThreadModal"
             />
-            <p>Type in your new thread title and its contetnt.</p>
             <b-form id="thread-box" @submit.prevent="">
-              <label for="thread_title">Thread title</label>
+              <p>Type in your new thread title and its contetnt.</p>
+              <label for="thread_title">
+                <span>Thread title</span>
+              </label>
               <b-form-input
                 id="thread_title"
                 type="text"
@@ -47,7 +49,9 @@
                 v-model="thread_title"
               ></b-form-input>
 
-              <label for="thread_content">Thread content</label>
+              <label for="thread_content">
+                <span>Thread content</span>
+              </label>
               <b-form-input
                 id="thread_content"
                 type="text"
@@ -55,9 +59,7 @@
                 required
                 v-model="thread_content"
               ></b-form-input>
-              <b-button block variant="primary" size="lg" type="submit" @click="addThread"
-                >Create thread</b-button
-              >
+              <b-button variant="primary" type="submit" @click="addThread">Create thread</b-button>
             </b-form>
           </div>
         </div>
@@ -69,11 +71,15 @@
 
         <!-- <Info> -->
         <div id="info">
-          <div>
+          <div v-if="this.email != ''">
             <v-gravatar :email="email" :size="40" default-img="identicon" />
           </div>
-          <div>
-            <p>{{ room }}</p>
+          <div v-else>
+            <font-awesome-icon :icon="['fal', 'question-circle']" style="font-size: 3rem" />
+          </div>
+          <div id="info-message">
+            <p style="font-weight: bold">{{ room }}</p>
+            <p>{{ thread_content }}</p>
           </div>
         </div>
         <!-- </Info> -->
@@ -95,7 +101,7 @@
                 </span>
               </template>
             </span>
-            <div><v-gravatar :email="comment.email" :size="80" default-img="identicon" /></div>
+            <div><v-gravatar :email="comment.email" :size="50" default-img="identicon" /></div>
             <div>
               <h1>{{ comment.username }}</h1>
               <p>{{ comment.content }}</p>
@@ -117,7 +123,7 @@
               variant="outline-secondary"
               class="clear-button"
             >
-              <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 3rem" class="mr-3" />
+              <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 2rem" class="mr-3" />
               <span>Clear</span>
             </b-button>
             <b-button
@@ -125,7 +131,7 @@
               variant="outline-success"
               class="reply-button"
             >
-              <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 3rem" class="mr-3" />
+              <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 2rem" class="mr-3" />
               <span>Reply</span>
             </b-button>
           </form>
@@ -217,19 +223,21 @@ export default {
   methods: {
     activateThread(thread) {
       this.comments = [];
+
+      this.room = thread.thread_title;
       this.room_id = thread.thread_id;
 
       if (this.room_id !== '') {
-        firebase.database().ref('threads').child(this.room_id).off();
+        firebase.database().ref('comments').child(this.room_id).off();
       }
 
-      this.room = thread.thread_title;
-      this.email = this.user.email;
+      this.email = '';
+      this.thread_content = thread.thread_content;
       this.placeholder = `Comment on ${thread.thread_title}, please`;
 
       firebase
         .database()
-        .ref('threads')
+        .ref('comments')
         .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
@@ -254,6 +262,8 @@ export default {
       this.thread_content = '';
     },
     showThreadModal() {
+      this.thread_titel = '';
+      this.thread_content = '';
       this.threadModal = true;
     },
     closeThreadModal() {
@@ -322,7 +332,6 @@ export default {
     },
     sendMessage(comment) {
       this.comment = comment;
-      console.log(this.comment);
 
       const newComment = firebase.database().ref('comments').child(this.room_id).push();
 

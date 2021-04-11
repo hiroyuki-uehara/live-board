@@ -14,7 +14,7 @@
     #thread-wrapper {
       z-index: 10;
       width: 50vw;
-      height: 50vh;
+      height: 65vh;
       background-color: snow;
       position: relative;
       padding-top: 3rem;
@@ -29,21 +29,22 @@
           opacity: 0.5;
         }
       }
-      p {
-        font-size: 4rem;
-        margin: 5rem;
-        padding-left: 2rem;
-      }
       #thread-box {
         margin: 0 auto;
         width: 40vw;
         font-size: 2rem;
+        p {
+          font-size: 2rem;
+          margin: 0 auto 1rem;
+          font-weight: bold;
+        }
         .thread-input {
-          font-size: 3rem;
-          margin: 1rem auto 0;
+          font-size: 2rem;
+          margin: 1rem auto;
+          padding: 2rem 1rem;
         }
         button {
-          margin: 6rem auto;
+          margin: 2rem auto;
           font-size: 3rem;
           width: 40vw;
         }

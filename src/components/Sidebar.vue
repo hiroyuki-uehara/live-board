@@ -23,7 +23,7 @@
     <section
       v-for="thread in threads"
       :key="thread.thread_id"
-      @click="$emit('threadtitle_clicked', thread)"
+      @click="$emit('thread_clicked', thread)"
     >
       <font-awesome-icon :icon="['fal', 'question-circle']" style="font-size: 2rem" class="mr-3" />
       <span>{{ thread.thread_title }}</span>
