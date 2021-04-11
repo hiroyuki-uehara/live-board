@@ -44,7 +44,7 @@
       </Sidebar>
       <div id="main" class="col-md-9">
         <!-- <Thread> -->
-        <div id="thread" v-show="threadModal" @click="closeThreadModal">
+        <div id="thread" v-show="threadModal">
           <div id="thread-wrapper" @click.stop>
             <font-awesome-icon
               :icon="['far', 'window-close']"
@@ -81,7 +81,36 @@
         <!-- </Thread> -->
 
         <!-- <Edit> -->
-        <div id="edit"></div>
+        <div id="edit" v-show="editModal">
+          <div class="edit-wrapper" @click.stop>
+            <div id="edit-box">
+              <font-awesome-icon
+                :icon="['far', 'window-close']"
+                class="modal-icon text-muted"
+                @click="closeEditModal"
+              />
+              <textarea :placeholder="post"></textarea>
+              <b-button
+                @click.prevent="clearComment"
+                variant="outline-secondary"
+                class="edit-clear-button"
+              >
+                <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 2rem" class="mr-3" />
+                <span>Clear</span>
+              </b-button>
+              <b-button
+                @click.prevent="sendMessage(comment)"
+                variant="outline-success"
+                class="edit-reply-button"
+              >
+                <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 2rem" class="mr-3" />
+                <span>Save</span>
+              </b-button>
+            </div>
+
+            <div id="dummy-edit"></div>
+          </div>
+        </div>
         <!-- </Edit> -->
 
         <!-- <Info> -->
@@ -109,7 +138,7 @@
           <div class="comment" v-for="(comment, index) in comments" :key="index">
             <span class="display-icon">
               <template v-if="isUser(comment)">
-                <span>
+                <span @click="editComment(comment)">
                   <font-awesome-icon :icon="['far', 'edit']" style="cursor: pointer" class="mr-3" />
                 </span>
                 <span @click="deleteComment(comment)">
@@ -191,6 +220,8 @@ export default {
       connectionRef: firebase.database().ref('connections'),
       connection_id: '',
       connections: [],
+      post: '',
+      editModal: false,
     };
   },
   components: {
@@ -296,7 +327,7 @@ export default {
   },
   beforeDestroy() {
     firebase.database().ref('users').off();
-    firebase.database().ref('comments').child(this.room_id).off();
+    firebase.database().ref('comments').off();
     firebase.database().ref('threads').off();
     firebase.database().ref('.info/connected').off();
   },
@@ -360,6 +391,15 @@ export default {
     closeThreadModal() {
       this.threadModal = false;
     },
+    showEditModal() {
+      this.edit_titel = '';
+      this.edit_content = '';
+      this.editModal = true;
+    },
+    closeEditModal() {
+      this.editModal = false;
+    },
+
     isUser(comment) {
       if (comment.username === this.user.username) {
         return true;
@@ -469,6 +509,26 @@ export default {
       } else {
         return;
       }
+    },
+    editComment(comment) {
+      this.post = '';
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .child(comment.comment_id)
+        .on('value', (snapshot) => {
+          this.post = snapshot.val().content;
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .once('value', (snapshot) => {
+          this.comments = snapshot.val();
+        });
+      this.showEditModal();
     },
     clearComment() {
       this.comment = '';
