@@ -4,7 +4,7 @@
       <font-awesome-icon :icon="['fas', 'chalkboard']" style="font-size: 3rem" class="ml-2" />
       <span class="mr-auto ml-4">Live Board</span>
     </div>
-    <section @click="$emit('myusername_clicked', username)">
+    <section @click="$emit('name_clicked', username)">
       <font-awesome-icon
         :icon="['fas', 'circle']"
         style="color: orange; font-size: 1.5rem"

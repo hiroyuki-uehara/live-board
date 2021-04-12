@@ -20,11 +20,11 @@
         :username="this.user.username"
         :threads="threads"
         :thread_title="thread_title"
-        @myusername_clicked="myMessage"
+        @name_clicked="memoThread"
         @plus_clicked="showThreadModal"
-        @thread_clicked="activateThread"
+        @thread_clicked="discussionThread"
       >
-        <section v-for="user in otherUsers" :key="user.user_id" @click="directMessage(user)">
+        <section v-for="user in otherUsers" :key="user.user_id" @click="chatThread(user)">
           <span v-if="isOnline(user)">
             <font-awesome-icon
               :icon="['fas', 'circle']"
@@ -89,7 +89,7 @@
                 class="edit-modal-icon text-muted"
                 @click="closeEditModal"
               />
-              <textarea :placeholder="post"></textarea>
+              <textarea :placeholder="post" v-model="comment"></textarea>
               <b-button
                 @click.prevent="clearComment"
                 variant="outline-secondary"
@@ -99,7 +99,7 @@
                 <span>Clear</span>
               </b-button>
               <b-button
-                @click.prevent="sendMessage(comment)"
+                @click.prevent="saveComment(comment)"
                 variant="outline-success"
                 class="edit-reply-button"
               >
@@ -126,7 +126,7 @@
             <p>{{ thread_content }}</p>
           </div>
           <div class="ml-auto">
-            <b-button variant="outline-primary" @click="showConnections">
+            <b-button variant="outline-primary" @click="anyFunction">
               <span>status</span>
             </b-button>
           </div>
@@ -170,7 +170,7 @@
             <textarea
               v-model="comment"
               :placeholder="placeholder"
-              @keyup.enter.ctrl.exact.prevent="sendMessage(comment)"
+              @keyup.enter.ctrl.exact.prevent="sendComment(comment)"
             ></textarea>
             <b-button
               @click.prevent="clearComment"
@@ -181,7 +181,7 @@
               <span>Clear</span>
             </b-button>
             <b-button
-              @click.prevent="sendMessage(comment)"
+              @click.prevent="sendComment(comment)"
               variant="outline-success"
               class="reply-button"
             >
@@ -223,6 +223,7 @@ export default {
       threads: [],
       threadModal: false,
       post: '',
+      post_id: '',
       editModal: false,
       connectionRef: firebase.database().ref('connections'),
       connection_id: '',
@@ -259,7 +260,7 @@ export default {
       .once('value', (snapshot) => {
         if (snapshot.exists()) {
           this.user.username = snapshot.val().username;
-          this.myMessage(this.user.username);
+          this.memoThread(this.user.username);
         } else {
           console.log('No data available');
         }
@@ -329,6 +330,7 @@ export default {
         }
       });
   },
+
   beforeDestroy() {
     firebase.database().ref('users').off();
     firebase.database().ref('comments').off();
@@ -336,16 +338,21 @@ export default {
     firebase.database().ref('.info/connected').off();
     firebase.database().ref('connections').off();
   },
-  methods: {
-    activateThread(thread) {
-      this.comments = [];
 
+  methods: {
+    anyFunction() {
+      console.log('clicked!!');
+    },
+
+    discussionThread(thread) {
+      this.comments = [];
       this.room = thread.thread_title;
-      this.room_id = thread.thread_id;
 
       if (this.room_id !== '') {
         firebase.database().ref('comments').child(this.room_id).off();
       }
+
+      this.room_id = thread.thread_id;
 
       this.email = '';
       this.thread_content = thread.thread_content;
@@ -362,14 +369,18 @@ export default {
             display_bottom.scrollTop = display_bottom.scrollHeight;
           });
         });
+
       firebase
         .database()
         .ref('comments')
         .child(this.room_id)
-        .on('child_removed', () => {
-          console.log('child removed');
+        .on('child_removed', (snapshot) => {
+          this.comments.filter((comment) => {
+            comment.comment_id !== snapshot.val().comment_id;
+          });
         });
     },
+
     addThread() {
       const newThread = firebase.database().ref('threads').push();
 
@@ -388,6 +399,7 @@ export default {
       this.thread_title = '';
       this.thread_content = '';
     },
+
     showThreadModal() {
       this.thread_titel = '';
       this.thread_content = '';
@@ -403,6 +415,7 @@ export default {
     },
     closeEditModal() {
       this.editModal = false;
+      this.post_id = '';
     },
 
     isUser(comment) {
@@ -413,7 +426,7 @@ export default {
       }
     },
 
-    directMessage(user) {
+    chatThread(user) {
       this.comments = [];
 
       if (this.user.uid > user.user_id) {
@@ -441,6 +454,7 @@ export default {
             display_bottom.scrollTop = display_bottom.scrollHeight;
           });
         });
+
       firebase
         .database()
         .ref('comments')
@@ -451,7 +465,8 @@ export default {
           });
         });
     },
-    myMessage(username) {
+
+    memoThread(username) {
       this.comments = [];
 
       this.room = username;
@@ -479,12 +494,15 @@ export default {
       firebase
         .database()
         .ref('comments')
-        .child(this.user.uid)
+        .child(this.room_id)
         .on('child_removed', (snapshot) => {
-          this.comments.push(snapshot.val());
+          this.comments.filter((comment) => {
+            comment.comment_id !== snapshot.val().comment_id;
+          });
         });
     },
-    sendMessage(comment) {
+
+    sendComment(comment) {
       this.comment = comment;
 
       const newComment = firebase.database().ref('comments').child(this.room_id).push();
@@ -502,24 +520,52 @@ export default {
       this.comment = '';
     },
 
-    deleteComment(comment) {
-      if (window.confirm('Do you really want to delete this comment?')) {
-        firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).remove();
+    saveComment(comment) {
+      this.comment = comment;
 
-        firebase
-          .database()
-          .ref('comments')
-          .child(this.room_id)
-          .once('value', (snapshot) => {
-            this.comments = snapshot.val();
-          });
-      } else {
-        return;
-      }
+      firebase.database().ref('comments').child(this.room_id).child(this.post_id).remove();
+
+      const newComment = firebase.database().ref('comments').child(this.room_id).push();
+
+      const comment_id = newComment.key;
+
+      newComment.set({
+        comment_id,
+        content: this.comment,
+        username: this.user.username,
+        email: this.user.email,
+        createdAt: firebase.database.ServerValue.TIMESTAMP,
+      });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .once('value', (snapshot) => {
+          this.comments = snapshot.val();
+        });
+
+      this.comment = '';
+      this.post_id = '';
+      this.closeEditModal();
+    },
+
+    deleteComment(comment) {
+      firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).remove();
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .once('value', (snapshot) => {
+          this.comments = snapshot.val();
+        });
     },
 
     editComment(comment) {
       this.post = '';
+      this.post_id = comment.comment_id;
+
       firebase
         .database()
         .ref('comments')
@@ -529,19 +575,14 @@ export default {
           this.post = snapshot.val().content;
         });
 
-      firebase
-        .database()
-        .ref('comments')
-        .child(this.room_id)
-        .once('value', (snapshot) => {
-          this.comments = snapshot.val();
-        });
       this.showEditModal();
     },
+
     clearComment() {
       this.comment = '';
       return this.comment;
     },
+
     isOnline(user) {
       if (user.status === 'online') {
         return true;
@@ -549,21 +590,11 @@ export default {
         return false;
       }
     },
+
     signOut() {
       this.connectionRef.child(this.connection_id).remove();
       firebase.auth().signOut();
       this.$router.push('/signin');
-    },
-    showConnections() {
-      console.log(this.users);
-      for (let user of this.users) {
-        console.log(user.username, user.status);
-      }
-
-      console.log(this.otherUsers);
-      for (let user of this.otherUsers) {
-        console.log(user.username, user.status);
-      }
     },
   },
 };
