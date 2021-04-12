@@ -86,7 +86,7 @@
             <div id="edit-box">
               <font-awesome-icon
                 :icon="['far', 'window-close']"
-                class="modal-icon text-muted"
+                class="edit-modal-icon text-muted"
                 @click="closeEditModal"
               />
               <textarea :placeholder="post"></textarea>
