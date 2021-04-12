@@ -126,6 +126,11 @@
             <p>{{ thread_content }}</p>
           </div>
           <div class="ml-auto">
+            <b-button variant="outline-primary" @click="showConnections">
+              <span>status</span>
+            </b-button>
+          </div>
+          <div>
             <b-button variant="outline-light" @click="signOut">
               <span>Sign out</span>
             </b-button>
@@ -217,11 +222,11 @@ export default {
       thread_content: '',
       threads: [],
       threadModal: false,
+      post: '',
+      editModal: false,
       connectionRef: firebase.database().ref('connections'),
       connection_id: '',
       connections: [],
-      post: '',
-      editModal: false,
     };
   },
   components: {
@@ -230,6 +235,22 @@ export default {
   },
   mounted() {
     this.user = firebase.auth().currentUser;
+
+    firebase
+      .database()
+      .ref('.info/connected')
+      .on('value', (snapshot) => {
+        if (snapshot.val() === true) {
+          let ref = this.connectionRef.push();
+          this.connection_id = ref.key;
+          ref.onDisconnect().remove();
+
+          ref.set({
+            user_id: this.user.uid,
+            connection_id: this.connection_id,
+          });
+        }
+      });
 
     firebase
       .database()
@@ -256,41 +277,11 @@ export default {
         if (this.user.uid === user.user_id) {
           user.status = 'online';
         } else {
-          user.status = 'offline';
+          user.status = 'offline;';
+          this.otherUsers.push(user);
         }
+
         this.users.push(user);
-      });
-
-    firebase
-      .database()
-      .ref('users')
-      .on('child_added', (snapshot) => {
-        if (this.user.username !== snapshot.val().username) {
-          this.otherUsers.push(snapshot.val());
-        }
-      });
-
-    firebase
-      .database()
-      .ref('threads')
-      .on('child_added', (snapshot) => {
-        this.threads.push(snapshot.val());
-      });
-
-    firebase
-      .database()
-      .ref('.info/connected')
-      .on('value', (snapshot) => {
-        if (snapshot.val()) {
-          let ref = this.connectionRef.push();
-          this.connection_id = ref.key;
-          ref.onDisconnect().remove();
-
-          ref.set({
-            user_id: this.user.uid,
-            connection_id: this.connection_id,
-          });
-        }
       });
 
     firebase
@@ -299,10 +290,23 @@ export default {
       .on('child_added', (snapshot) => {
         let new_connection = snapshot.val();
         this.connections.push(new_connection);
-        let user = this.otherUsers.find((user) => user.user_id === new_connection.user_id);
-        if (user) {
-          user.status = 'online';
-        }
+        this.users.forEach((user) => {
+          if (user.user_id === new_connection.user_id) {
+            user.status = 'online';
+          }
+        });
+        this.otherUsers.forEach((user) => {
+          if (user.user_id === new_connection.user_id) {
+            user.status = 'online';
+          }
+        });
+      });
+
+    firebase
+      .database()
+      .ref('threads')
+      .on('child_added', (snapshot) => {
+        this.threads.push(snapshot.val());
       });
 
     firebase
@@ -320,7 +324,7 @@ export default {
         });
 
         if (index === -1) {
-          let user = this.otherUsers.find((user) => user.user_id === remove_connection.user_id);
+          let user = this.users.find((user) => user.user_id === remove_connection.user_id);
           user.status = 'offline';
         }
       });
@@ -330,6 +334,7 @@ export default {
     firebase.database().ref('comments').off();
     firebase.database().ref('threads').off();
     firebase.database().ref('.info/connected').off();
+    firebase.database().ref('connections').off();
   },
   methods: {
     activateThread(thread) {
@@ -407,6 +412,7 @@ export default {
         return false;
       }
     },
+
     directMessage(user) {
       this.comments = [];
 
@@ -495,6 +501,7 @@ export default {
 
       this.comment = '';
     },
+
     deleteComment(comment) {
       if (window.confirm('Do you really want to delete this comment?')) {
         firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).remove();
@@ -510,6 +517,7 @@ export default {
         return;
       }
     },
+
     editComment(comment) {
       this.post = '';
       firebase
@@ -545,6 +553,17 @@ export default {
       this.connectionRef.child(this.connection_id).remove();
       firebase.auth().signOut();
       this.$router.push('/signin');
+    },
+    showConnections() {
+      console.log(this.users);
+      for (let user of this.users) {
+        console.log(user.username, user.status);
+      }
+
+      console.log(this.otherUsers);
+      for (let user of this.otherUsers) {
+        console.log(user.username, user.status);
+      }
     },
   },
 };
