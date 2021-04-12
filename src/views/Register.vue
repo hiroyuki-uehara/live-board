@@ -84,6 +84,17 @@ export default {
       email: '',
       password: '',
       errors: [],
+      nicknames: [
+        'Lancelot',
+        'Gawain',
+        'Tristan',
+        'Galahad',
+        'Perceval',
+        'Bors',
+        'Mordred',
+        'Constantine',
+        'Bedivere',
+      ],
     };
   },
   components: {

@@ -21,8 +21,8 @@
         :threads="threads"
         :thread_title="thread_title"
         @name_clicked="memoThread"
-        @plus_clicked="showThreadModal"
         @thread_clicked="discussionThread"
+        @plus_clicked="showThreadModal"
       >
         <section v-for="user in otherUsers" :key="user.user_id" @click="chatThread(user)">
           <span v-if="isOnline(user)">
@@ -348,8 +348,6 @@ export default {
   methods: {
     doWhatsoever() {
       console.log('clicked!!');
-      // this.$refs.textInput.focus();
-      document.getElementById('commentInput').focus();
     },
 
     memoThread(username) {
