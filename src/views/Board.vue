@@ -89,7 +89,7 @@
                 class="edit-modal-icon text-muted"
                 @click="closeEditModal"
               />
-              <textarea :placeholder="post" v-model="comment"></textarea>
+              <textarea :placeholder="post" v-model.lazy="comment"></textarea>
               <b-button
                 @click.prevent="clearComment"
                 variant="outline-secondary"
@@ -344,6 +344,33 @@ export default {
       console.log('clicked!!');
     },
 
+    memoThread(username) {
+      this.comments = [];
+
+      this.room = username;
+      this.email = this.user.email;
+      this.placeholder = 'Jot something down';
+
+      if (this.room_id !== '') {
+        firebase.database().ref('comments').child(this.room_id).off();
+      }
+
+      this.room_id = this.user.uid;
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.user.uid)
+        .on('child_added', (snapshot) => {
+          this.comments.push(snapshot.val());
+
+          this.$nextTick(() => {
+            let display_bottom = document.getElementById('display');
+            display_bottom.scrollTop = display_bottom.scrollHeight;
+          });
+        });
+    },
+
     discussionThread(thread) {
       this.comments = [];
       this.room = thread.thread_title;
@@ -369,16 +396,6 @@ export default {
             display_bottom.scrollTop = display_bottom.scrollHeight;
           });
         });
-
-      firebase
-        .database()
-        .ref('comments')
-        .child(this.room_id)
-        .on('child_removed', (snapshot) => {
-          this.comments.filter((comment) => {
-            comment.comment_id !== snapshot.val().comment_id;
-          });
-        });
     },
 
     addThread() {
@@ -398,32 +415,6 @@ export default {
 
       this.thread_title = '';
       this.thread_content = '';
-    },
-
-    showThreadModal() {
-      this.thread_titel = '';
-      this.thread_content = '';
-      this.threadModal = true;
-    },
-    closeThreadModal() {
-      this.threadModal = false;
-    },
-    showEditModal() {
-      this.edit_titel = '';
-      this.edit_content = '';
-      this.editModal = true;
-    },
-    closeEditModal() {
-      this.editModal = false;
-      this.post_id = '';
-    },
-
-    isUser(comment) {
-      if (comment.username === this.user.username) {
-        return true;
-      } else {
-        return false;
-      }
     },
 
     chatThread(user) {
@@ -466,42 +457,6 @@ export default {
         });
     },
 
-    memoThread(username) {
-      this.comments = [];
-
-      this.room = username;
-      this.email = this.user.email;
-      this.placeholder = 'Jot something down';
-
-      if (this.room_id !== '') {
-        firebase.database().ref('comments').child(this.room_id).off();
-      }
-
-      this.room_id = this.user.uid;
-
-      firebase
-        .database()
-        .ref('comments')
-        .child(this.user.uid)
-        .on('child_added', (snapshot) => {
-          this.comments.push(snapshot.val());
-          this.$nextTick(() => {
-            let display_bottom = document.getElementById('display');
-            display_bottom.scrollTop = display_bottom.scrollHeight;
-          });
-        });
-
-      firebase
-        .database()
-        .ref('comments')
-        .child(this.room_id)
-        .on('child_removed', (snapshot) => {
-          this.comments.filter((comment) => {
-            comment.comment_id !== snapshot.val().comment_id;
-          });
-        });
-    },
-
     sendComment(comment) {
       this.comment = comment;
 
@@ -520,22 +475,39 @@ export default {
       this.comment = '';
     },
 
-    saveComment(comment) {
-      this.comment = comment;
+    editComment(comment) {
+      this.post = '';
+      this.post_id = comment.comment_id;
 
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .child(comment.comment_id)
+        .once('value', (snapshot) => {
+          this.post = snapshot.val().content;
+        });
+
+      this.showEditModal();
+    },
+
+    saveComment(comment) {
       firebase.database().ref('comments').child(this.room_id).child(this.post_id).remove();
 
+      this.comment = comment;
       const newComment = firebase.database().ref('comments').child(this.room_id).push();
-
       const comment_id = newComment.key;
-
-      newComment.set({
-        comment_id,
-        content: this.comment,
-        username: this.user.username,
-        email: this.user.email,
-        createdAt: firebase.database.ServerValue.TIMESTAMP,
-      });
+      newComment
+        .set({
+          comment_id,
+          content: this.comment,
+          username: this.user.username,
+          email: this.user.email,
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
+        })
+        .then(() => {
+          this.editModal = false;
+        });
 
       firebase
         .database()
@@ -547,7 +519,6 @@ export default {
 
       this.comment = '';
       this.post_id = '';
-      this.closeEditModal();
     },
 
     deleteComment(comment) {
@@ -562,27 +533,36 @@ export default {
         });
     },
 
-    editComment(comment) {
-      this.post = '';
-      this.post_id = comment.comment_id;
-
-      firebase
-        .database()
-        .ref('comments')
-        .child(this.room_id)
-        .child(comment.comment_id)
-        .on('value', (snapshot) => {
-          this.post = snapshot.val().content;
-        });
-
-      this.showEditModal();
-    },
-
     clearComment() {
       this.comment = '';
       return this.comment;
     },
 
+    showThreadModal() {
+      this.thread_titel = '';
+      this.thread_content = '';
+      this.threadModal = true;
+    },
+    closeThreadModal() {
+      this.threadModal = false;
+    },
+    showEditModal() {
+      this.edit_titel = '';
+      this.edit_content = '';
+      this.editModal = true;
+    },
+    closeEditModal() {
+      this.editModal = false;
+      this.post_id = '';
+    },
+
+    isUser(comment) {
+      if (comment.username === this.user.username) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     isOnline(user) {
       if (user.status === 'online') {
         return true;
