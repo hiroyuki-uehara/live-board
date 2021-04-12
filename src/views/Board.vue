@@ -89,7 +89,12 @@
                 class="edit-modal-icon text-muted"
                 @click="closeEditModal"
               />
-              <textarea :placeholder="post" v-model.lazy="comment"></textarea>
+              <textarea
+                ref="commentInput"
+                autofocus
+                :placeholder="post"
+                v-model.lazy="comment"
+              ></textarea>
               <b-button
                 @click.prevent="clearComment"
                 variant="outline-secondary"
@@ -126,7 +131,7 @@
             <p>{{ thread_content }}</p>
           </div>
           <div class="ml-auto">
-            <b-button variant="outline-primary" @click="anyFunction">
+            <b-button variant="outline-primary" @click="doWhatsoever">
               <span>status</span>
             </b-button>
           </div>
@@ -142,7 +147,7 @@
         <div id="display">
           <div class="comment" v-for="(comment, index) in comments" :key="index">
             <span class="display-icon">
-              <template v-if="isUser(comment)">
+              <template v-if="isAuthor(comment)">
                 <span @click="editComment(comment)">
                   <font-awesome-icon :icon="['far', 'edit']" style="cursor: pointer" class="mr-3" />
                 </span>
@@ -168,6 +173,7 @@
         <div id="editor">
           <form>
             <textarea
+              autofocus
               v-model="comment"
               :placeholder="placeholder"
               @keyup.enter.ctrl.exact.prevent="sendComment(comment)"
@@ -340,8 +346,10 @@ export default {
   },
 
   methods: {
-    anyFunction() {
+    doWhatsoever() {
       console.log('clicked!!');
+      // this.$refs.textInput.focus();
+      document.getElementById('commentInput').focus();
     },
 
     memoThread(username) {
@@ -487,19 +495,22 @@ export default {
         .once('value', (snapshot) => {
           this.post = snapshot.val().content;
         });
-
       this.showEditModal();
+      this.$nextTick(() => {
+        this.$refs.commentInput.focus();
+      });
     },
 
     saveComment(comment) {
-      firebase.database().ref('comments').child(this.room_id).child(this.post_id).remove();
-
       this.comment = comment;
-      const newComment = firebase.database().ref('comments').child(this.room_id).push();
-      const comment_id = newComment.key;
-      newComment
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .child(this.post_id)
         .set({
-          comment_id,
+          comment_id: this.post_id,
           content: this.comment,
           username: this.user.username,
           email: this.user.email,
@@ -556,7 +567,7 @@ export default {
       this.post_id = '';
     },
 
-    isUser(comment) {
+    isAuthor(comment) {
       if (comment.username === this.user.username) {
         return true;
       } else {
