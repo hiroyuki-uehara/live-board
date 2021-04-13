@@ -92,7 +92,6 @@
               <textarea
                 ref="commentInput"
                 autofocus
-                :placeholder="post"
                 v-model="comment"
                 @keyup.enter.ctrl.exact.prevent="saveComment(comment)"
               ></textarea>
@@ -154,7 +153,6 @@
 
         <!-- <Display> -->
         <div id="display">
-          <div class="overlay"></div>
           <div class="comment" v-for="(comment, index) in comments" :key="index">
             <span class="display-icon">
               <template v-if="isAuthor(comment)">
@@ -171,10 +169,18 @@
               </template>
             </span>
             <div><v-gravatar :email="comment.email" :size="50" default-img="identicon" /></div>
-            <div>
+            <div class="comment-box">
               <h1>{{ comment.username }}</h1>
-              <p>{{ comment.content }}</p>
+              <div>
+                <p>{{ comment.content }}</p>
+              </div>
             </div>
+            <!-- <div id="overlay" v-show="toggle"></div>
+            <div class="toggle-box">
+              <b-button variant="outline-info" class="ml-auto" @click="showComment(comment)"
+                >Toggle</b-button
+              >
+            </div> -->
           </div>
         </div>
         <!-- </Display> -->
@@ -244,6 +250,7 @@ export default {
       connectionRef: firebase.database().ref('connections'),
       connection_id: '',
       connections: [],
+      toggle: true,
     };
   },
   components: {
@@ -408,6 +415,7 @@ export default {
         .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
+
           this.$nextTick(() => {
             let display_bottom = document.getElementById('display');
             display_bottom.scrollTop = display_bottom.scrollHeight;
@@ -488,6 +496,7 @@ export default {
         username: this.user.username,
         email: this.user.email,
         createdAt: firebase.database.ServerValue.TIMESTAMP,
+        toggle: false,
       });
 
       this.comment = '';
@@ -505,6 +514,7 @@ export default {
         .once('value', (snapshot) => {
           this.post = snapshot.val().content;
         });
+      this.comment = this.post;
       this.showEditModal();
       this.$nextTick(() => {
         this.$refs.commentInput.focus();
@@ -591,7 +601,9 @@ export default {
         return false;
       }
     },
-
+    showComment(comment) {
+      console.log(comment.content);
+    },
     signOut() {
       this.connectionRef.child(this.connection_id).remove();
       firebase.auth().signOut();

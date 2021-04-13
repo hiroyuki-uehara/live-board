@@ -8,8 +8,11 @@
     margin: 0 auto;
     padding-top: 1rem;
     overflow-y: auto;
-    
+
     .comment {
+      top: 0;
+      left: 0;
+      z-index: 16;
       background-color: snow;
       width: 72vw;
       height: 13vh;
@@ -21,6 +24,7 @@
       align-items: center;
       position: relative;
       .display-icon {
+        z-index: 16;
         position: absolute;
         right: 0;
         bottom: 0;
@@ -28,20 +32,64 @@
         margin: 1rem;
         color: gray;
       }
-      div {
-        margin: 0;
-        padding: 0;
+
+      .comment-box {
+        width: 59vw;
+        height: 13vh;
+        margin-right: 0.5rem;
+        padding: 0.5rem 0rem 0.5rem 0;
+        position: relarive;
         h1 {
-          font-size: 1.8rem;
+          position: absolute;
+          top: 0.5rem;
+          left: 5vw;
+          font-size: 1.6rem;
           margin-left: 2rem;
-          margin-bottom: 1rem;
+          margin-bottom: 0.5rem;
         }
-        p {
-          font-size: 2.8rem;
-          margin-left: 2rem;
+        div {
+          overflow-y: auto;
+          z-index: 16;
+          position: relative;
+          top: 1vh;
+          left: 1vw;
+          width: 58vw;
+          height: 5vh;
+
+          margin: 2rem 0 0 0;
+          padding: 0 0 0 0;
+          p {
+            font-size: 2rem;
+            margin-left: 0rem;
+            padding-right: 2rem;
+          }
         }
       }
-
+      #overlay {
+        z-index: 50;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 72vw;
+        height: 13vh;
+        background-color: rgba(245, 245, 175, 1);
+        margin: 0;
+        padding: 0;
+      }
+      .toggle-box {
+        width: 72vw;
+        height: 13vh;
+        z-index: 51;
+        position: absolute;
+        padding-right: 12rem;
+        display: flex;
+        align-items: center;
+        button {
+          width: 7rem;
+          height: 4rem;
+          font-size: 1.4rem;
+        }
+      }
     }
   }
 }
