@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # README.md
+=======
+# Live Board
+>>>>>>> origin/develop
 
 ## Project setup
 
@@ -27,3 +31,15 @@ npm run lint
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
+<<<<<<< HEAD
+=======
+
+
+## License
+
+The MIT License (MIT) - See file 'LICENSE' in this project
+
+### Copyright
+
+Copyright © 2021 Hiroyuki Uehara. All Rights Reserved.
+>>>>>>> origin/develop

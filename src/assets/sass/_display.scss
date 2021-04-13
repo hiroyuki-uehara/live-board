@@ -1,0 +1,47 @@
+@media screen and (max-width: 768px) {
+}
+@media screen and (min-width: 768px) {
+  #display {
+    background-color: sandybrown;
+    width: 75vw;
+    height: 60vh;
+    margin: 0 auto;
+    padding-top: 1rem;
+    overflow-y: auto;
+    
+    .comment {
+      background-color: snow;
+      width: 72vw;
+      height: 13vh;
+      font-size: 2rem;
+      margin: 0rem 1rem 1rem 1rem;
+      padding: 0.5rem 3rem 0.5rem 2rem;
+      border-radius: 0.3rem;
+      display: flex;
+      align-items: center;
+      position: relative;
+      .display-icon {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        font-size: 2.4rem;
+        margin: 1rem;
+        color: gray;
+      }
+      div {
+        margin: 0;
+        padding: 0;
+        h1 {
+          font-size: 1.8rem;
+          margin-left: 2rem;
+          margin-bottom: 1rem;
+        }
+        p {
+          font-size: 2.8rem;
+          margin-left: 2rem;
+        }
+      }
+
+    }
+  }
+}

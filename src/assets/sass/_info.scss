@@ -1,0 +1,33 @@
+@media screen and (max-width: 768px) {}
+@media screen and (min-width: 768px) {
+  #info {
+    background-color: pink;
+    width: 75vw;
+    height: 10vh;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    div {
+      margin-left: 1rem;
+    }
+    #info-message {
+      display: flex;
+      align-items: center;
+      p {
+        font-size: 2.2rem;
+        margin-left: 0.5rem;
+        margin-right: 3rem;
+        color: black;
+      }
+    }
+    button {
+      width: 6vw;
+      height: 6vh;
+      span {
+        font-size: 1.4rem;
+        color: gray;
+      }
+    }
+  }
+}
