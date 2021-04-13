@@ -154,6 +154,7 @@
 
         <!-- <Display> -->
         <div id="display">
+          <div class="overlay"></div>
           <div class="comment" v-for="(comment, index) in comments" :key="index">
             <span class="display-icon">
               <template v-if="isAuthor(comment)">
