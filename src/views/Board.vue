@@ -128,7 +128,15 @@
             <font-awesome-icon :icon="['fal', 'question-circle']" style="font-size: 3rem" />
           </div>
           <div id="info-message">
-            <p style="font-weight: bold">{{ room }}</p>
+            <p style="font-weight: bold">
+              {{ room
+              }}<small
+                v-show="this.room === this.user.username"
+                class="ml-3 text-muted"
+                style="font-size: 1.8rem"
+                >you</small
+              >
+            </p>
             <p>{{ thread_content }}</p>
           </div>
           <div class="ml-auto">
@@ -353,6 +361,7 @@ export default {
 
     memoThread(username) {
       this.comments = [];
+      this.thread_content = '';
 
       this.room = username;
       this.email = this.user.email;
@@ -426,6 +435,7 @@ export default {
 
     chatThread(user) {
       this.comments = [];
+      this.thread_content = '';
 
       if (this.user.uid > user.user_id) {
         this.room_id = `${this.user.uid}-${user.user_id}`;
