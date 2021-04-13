@@ -168,19 +168,21 @@
                 </span>
               </template>
             </span>
-            <div><v-gravatar :email="comment.email" :size="50" default-img="identicon" /></div>
+            <div style="z-index: 60">
+              <v-gravatar :email="comment.email" :size="50" default-img="identicon" />
+            </div>
             <div class="comment-box">
               <h1>{{ comment.username }}</h1>
               <div>
                 <p>{{ comment.content }}</p>
               </div>
             </div>
-            <!-- <div id="overlay" v-show="toggle"></div>
+            <div id="overlay" v-show="toggle"></div>
             <div class="toggle-box">
               <b-button variant="outline-info" class="ml-auto" @click="showComment(comment)"
                 >Toggle</b-button
               >
-            </div> -->
+            </div>
           </div>
         </div>
         <!-- </Display> -->
