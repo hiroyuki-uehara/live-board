@@ -117,6 +117,7 @@ export default {
               user_id: user.uid,
               username: this.username,
               email: user.email,
+              lastRoom_id: user.uid,
             })
             .then(() => {
               this.$router.push('/');

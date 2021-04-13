@@ -173,14 +173,27 @@
             </div>
             <div class="comment-box">
               <h1>{{ comment.username }}</h1>
+              <span class="readable" v-if="isAdmin === true"
+                ><small class="text-muted mr-4">Readable?</small>{{ comment.isReadable }}</span
+              >
               <div>
                 <p>{{ comment.content }}</p>
               </div>
             </div>
-            <div id="overlay" v-show="toggle"></div>
+            <div id="overlay" v-if="hideComment(comment)"></div>
             <div class="toggle-box">
-              <b-button variant="outline-info" class="ml-auto" @click="showComment(comment)"
-                >Toggle</b-button
+              <b-button
+                variant="outline-primary"
+                class="ml-auto"
+                v-show="isAdmin === true"
+                @click.prevent="pressShow(comment)"
+                >Show</b-button
+              >
+              <b-button
+                variant="outline-info"
+                v-show="isAdmin === true"
+                @click.prevent="pressHide(comment)"
+                >Hide</b-button
               >
             </div>
           </div>
@@ -252,16 +265,20 @@ export default {
       connectionRef: firebase.database().ref('connections'),
       connection_id: '',
       connections: [],
-      toggle: true,
+      isAdmin: false,
     };
   },
   components: {
     Header,
     Sidebar,
   },
-  mounted() {
+  beforeMount() {
     this.user = firebase.auth().currentUser;
-
+  },
+  mounted() {
+    if (this.user.username === 'Jay Gatsby') {
+      this.isAdmin = true;
+    }
     firebase
       .database()
       .ref('.info/connected')
@@ -278,17 +295,43 @@ export default {
         }
       });
 
+    // firebase
+    //   .database()
+    //   .ref('users')
+    //   .child(this.user.uid)
+    //   .once('value', (snapshot) => {
+    //     if (snapshot.exists()) {
+    //       this.user.username = snapshot.val().username;
+    //       this.memoThread(this.user.username);
+    //     } else {
+    //       console.log('No data available');
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error.message);
+    //   });
+
     firebase
       .database()
       .ref('users')
       .child(this.user.uid)
       .once('value', (snapshot) => {
         if (snapshot.exists()) {
-          this.user.username = snapshot.val().username;
-          this.memoThread(this.user.username);
+          this.room_id = snapshot.val().lastRoom_id;
         } else {
           console.log('No data available');
         }
+        firebase
+          .database()
+          .ref('comments')
+          .child(this.room_id)
+          .on('child_added', (snapshot) => {
+            this.comments.push(snapshot.val());
+          });
+        this.$nextTick(() => {
+          let display_bottom = document.getElementById('display');
+          display_bottom.scrollTop = display_bottom.scrollHeight;
+        });
       })
       .catch((error) => {
         console.error(error.message);
@@ -363,10 +406,11 @@ export default {
     firebase.database().ref('.info/connected').off();
     firebase.database().ref('connections').off();
   },
+  computed: {},
 
   methods: {
     doWhatsoever() {
-      console.log('clicked!!');
+      console.log(`Is this user Admin? ${this.isAdmin}`);
     },
 
     memoThread(username) {
@@ -382,6 +426,7 @@ export default {
       }
 
       this.room_id = this.user.uid;
+      firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
 
       firebase
         .database()
@@ -406,6 +451,8 @@ export default {
       }
 
       this.room_id = thread.thread_id;
+
+      firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
 
       this.email = '';
       this.thread_content = thread.thread_content;
@@ -448,15 +495,17 @@ export default {
       this.comments = [];
       this.thread_content = '';
 
+      if (this.room_id !== '') {
+        firebase.database().ref('comments').child(this.room_id).off();
+      }
+
       if (this.user.uid > user.user_id) {
         this.room_id = `${this.user.uid}-${user.user_id}`;
       } else {
         this.room_id = `${user.user_id}-${this.user.uid}`;
       }
 
-      if (this.room_id !== '') {
-        firebase.database().ref('comments').child(this.room_id).off();
-      }
+      firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
 
       this.room = user.username;
       this.email = user.email;
@@ -498,8 +547,20 @@ export default {
         username: this.user.username,
         email: this.user.email,
         createdAt: firebase.database.ServerValue.TIMESTAMP,
-        toggle: false,
+        isReadable: true,
       });
+
+      firebase
+        .database()
+        .ref('threads')
+        .once('child_added', (snapshot) => {
+          console.log(this.room_id, snapshot.val().thread_id);
+          if (this.room_id === snapshot.val().thread_id) {
+            firebase.database().ref('comments').child(this.room_id).child(comment_id).update({
+              isReadable: false,
+            });
+          }
+        });
 
       this.comment = '';
     },
@@ -537,9 +598,21 @@ export default {
           username: this.user.username,
           email: this.user.email,
           createdAt: firebase.database.ServerValue.TIMESTAMP,
+          isReadable: true,
         })
         .then(() => {
           this.editModal = false;
+        });
+
+      firebase
+        .database()
+        .ref('threads')
+        .once('child_added', (snapshot) => {
+          if (this.room_id === snapshot.val().thread_id) {
+            firebase.database().ref('comments').child(this.room_id).child(this.post_id).update({
+              isReadable: false,
+            });
+          }
         });
 
       firebase
@@ -603,13 +676,46 @@ export default {
         return false;
       }
     },
-    showComment(comment) {
-      console.log(comment.content);
-    },
     signOut() {
       this.connectionRef.child(this.connection_id).remove();
       firebase.auth().signOut();
       this.$router.push('/signin');
+    },
+
+    pressShow(comment) {
+      firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).update({
+        isReadable: true,
+      });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .once('value', (snapshot) => {
+          this.comments = snapshot.val();
+        });
+    },
+    pressHide(comment) {
+      firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).update({
+        isReadable: false,
+      });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .once('value', (snapshot) => {
+          this.comments = snapshot.val();
+        });
+    },
+    hideComment(comment) {
+      if (comment.username === this.user.username) {
+        return false;
+      } else if (comment.isReadable === true) {
+        return false;
+      } else {
+        return true;
+      }
     },
   },
 };
