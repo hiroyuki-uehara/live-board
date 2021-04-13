@@ -1,8 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-<<<<<<< HEAD
-import Home from '../views/Home.vue';
-=======
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
@@ -10,7 +7,6 @@ import Home from '../views/Home.vue';
 import Board from '../views/Board.vue';
 import Register from '../views/Register.vue';
 import SignIn from '../views/SignIn.vue';
->>>>>>> origin/develop
 
 Vue.use(VueRouter);
 
@@ -20,8 +16,6 @@ const routes = [
     name: 'Home',
     component: Home,
   },
-<<<<<<< HEAD
-=======
   {
     path: '/board',
     name: 'Board',
@@ -46,7 +40,6 @@ const routes = [
     name: 'SignIn',
     component: SignIn,
   },
->>>>>>> origin/develop
 ];
 
 const router = new VueRouter({

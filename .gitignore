@@ -20,11 +20,8 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
-<<<<<<< HEAD
-=======
 
 .sass-cache/
 *.css.map
 *.sass.map
 *.scss.map
->>>>>>> origin/develop

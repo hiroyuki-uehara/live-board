@@ -1,10 +1,7 @@
 html {
-<<<<<<< HEAD
-=======
   font-family: 'Noto Sans JP', sans-serif;
   font-style: normal;
   font-weight: 400;
->>>>>>> origin/develop
   font-size: 62.5%;
   margin: 0;
   padding: 0;
@@ -155,11 +152,7 @@ del {
 
 abbr[title],
 dfn[title] {
-<<<<<<< HEAD
-  border-bottom: 1px dotted;
-=======
   border-bottom: 0.1rem dotted;
->>>>>>> origin/develop
   cursor: help;
 }
 
@@ -171,17 +164,10 @@ table {
 /* change border colour to suit your needs */
 hr {
   display: block;
-<<<<<<< HEAD
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #cccccc;
-  margin: 1em 0;
-=======
   height: 0.1rem;
   border: 0;
   border-top: 0.1rem solid #cccccc;
   margin: 0.1rem 0;
->>>>>>> origin/develop
   padding: 0;
 }
 

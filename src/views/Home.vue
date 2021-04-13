@@ -1,15 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div></div>
-</template>
-
-<script>
-export default {
-  name: 'Home',
-  components: {},
-};
-</script>
-=======
   <div class="container">
     <Header>
       <div><p class="header-title ml-5">Home</p></div>
@@ -75,4 +64,3 @@ export default {
 @import '../assets/sass/background';
 @import '../assets/sass/home';
 </style>
->>>>>>> origin/develop
