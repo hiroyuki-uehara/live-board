@@ -93,7 +93,8 @@
                 ref="commentInput"
                 autofocus
                 :placeholder="post"
-                v-model.lazy="comment"
+                v-model="comment"
+                @keyup.enter.ctrl.exact.prevent="saveComment(comment)"
               ></textarea>
               <b-button
                 @click.prevent="clearComment"
