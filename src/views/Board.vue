@@ -362,7 +362,7 @@ export default {
             .ref('comments')
             .child(this.room_id)
             .on('child_removed', (oldsnapshot) => {
-              this.comments = this.comments.filter(
+              this.comments = Object.values(this.comments).filter(
                 (comment) => comment.comment_id !== oldsnapshot.val().comment_id
               );
             });
@@ -372,10 +372,12 @@ export default {
             .ref('comments')
             .child(this.room_id)
             .on('child_changed', (snapshot) => {
-              let index = this.comments.findIndex(
-                (comment) => comment.comment_id === snapshot.val().comment_id
-              );
-              this.comments.splice(index, 1, snapshot.val());
+              let i = 0;
+              Object.values(this.comments).filter((comment, index) => {
+                i = index;
+                return comment.comment_id === snapshot.val().comment_id;
+              });
+              Object.values(this.comments).splice(i, 1, snapshot.val());
             });
         } else {
           console.log('No data available');
@@ -432,15 +434,21 @@ export default {
       .on('child_removed', (snapshot) => {
         let remove_connection = snapshot.val();
 
-        this.connections = this.connections.filter((connection) => {
+        this.connections = Object.values(this.connections).filter((connection) => {
           return connection.connection_id !== remove_connection.connection_id;
         });
 
-        let index = this.connections.findIndex((connection) => {
+        // let index = this.connections.findIndex((connection) => {
+        //   return connection.user_id === remove_connection.user_id;
+        // });
+
+        let i = -1;
+        Object.values(this.connections).filter((connection, index) => {
+          i = index;
           return connection.user_id === remove_connection.user_id;
         });
 
-        if (index === -1) {
+        if (i === -1) {
           let user = this.users.find((user) => user.user_id === remove_connection.user_id);
           user.status = 'offline';
         }
@@ -495,7 +503,7 @@ export default {
         .ref('comments')
         .child(this.room_id)
         .on('child_removed', (oldsnapshot) => {
-          this.comments = this.comments.filter(
+          this.comments = Object.values(this.comments).filter(
             (comment) => comment.comment_id !== oldsnapshot.val().comment_id
           );
         });
@@ -505,10 +513,12 @@ export default {
         .ref('comments')
         .child(this.room_id)
         .on('child_changed', (snapshot) => {
-          let index = this.comments.findIndex(
-            (comment) => comment.comment_id === snapshot.val().comment_id
-          );
-          this.comments.splice(index, 1, snapshot.val());
+          let i = 0;
+          Object.values(this.comments).filter((comment, index) => {
+            i = index;
+            return comment.comment_id === snapshot.val().comment_id;
+          });
+          Object.values(this.comments).splice(i, 1, snapshot.val());
         });
     },
 
@@ -546,7 +556,7 @@ export default {
         .ref('comments')
         .child(this.room_id)
         .on('child_removed', (oldsnapshot) => {
-          this.comments = this.comments.filter(
+          this.comments = Object.values(this.comments).filter(
             (comment) => comment.comment_id !== oldsnapshot.val().comment_id
           );
         });
@@ -556,10 +566,12 @@ export default {
         .ref('comments')
         .child(this.room_id)
         .on('child_changed', (snapshot) => {
-          let index = this.comments.findIndex(
-            (comment) => comment.comment_id === snapshot.val().comment_id
-          );
-          this.comments.splice(index, 1, snapshot.val());
+          let i = 0;
+          Object.values(this.comments).filter((comment, index) => {
+            i = index;
+            return comment.comment_id === snapshot.val().comment_id;
+          });
+          Object.values(this.comments).splice(i, 1, snapshot.val());
         });
     },
 
@@ -620,7 +632,7 @@ export default {
         .ref('comments')
         .child(this.room_id)
         .on('child_removed', (oldsnapshot) => {
-          this.comments = this.comments.filter(
+          this.comments = Object.values(this.comments).filter(
             (comment) => comment.comment_id !== oldsnapshot.val().comment_id
           );
         });
@@ -630,10 +642,12 @@ export default {
         .ref('comments')
         .child(this.room_id)
         .on('child_changed', (snapshot) => {
-          let index = this.comments.findIndex(
-            (comment) => comment.comment_id === snapshot.val().comment_id
-          );
-          this.comments.splice(index, 1, snapshot.val());
+          let i = 0;
+          Object.values(this.comments).filter((comment, index) => {
+            i = index;
+            return comment.comment_id === snapshot.val().comment_id;
+          });
+          Object.values(this.comments).splice(i, 1, snapshot.val());
         });
     },
 
