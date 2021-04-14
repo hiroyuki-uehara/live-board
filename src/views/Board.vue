@@ -304,7 +304,6 @@ export default {
         if (snapshot.exists()) {
           this.user.username = snapshot.val().username;
           this.user.lastRoom_id = snapshot.val().lastRoom_id;
-          this.room_id = snapshot.val().lastRoom_id;
           if (this.user.username === 'Jay Gatsby') {
             this.isAdmin = true;
           }
@@ -343,18 +342,41 @@ export default {
               });
           }
 
+          this.room_id = this.user.lastRoom_id;
+
           firebase
             .database()
             .ref('comments')
-            .child(snapshot.val().lastRoom_id)
+            .child(this.room_id)
             .on('child_added', (snapshot) => {
               this.comments.push(snapshot.val());
+
+              this.$nextTick(() => {
+                let display_bottom = document.getElementById('display');
+                display_bottom.scrollTop = display_bottom.scrollHeight;
+              });
             });
 
-          this.$nextTick(() => {
-            let display_bottom = document.getElementById('display');
-            display_bottom.scrollTop = display_bottom.scrollHeight;
-          });
+          firebase
+            .database()
+            .ref('comments')
+            .child(this.room_id)
+            .on('child_removed', (oldsnapshot) => {
+              this.comments = this.comments.filter(
+                (comment) => comment.comment_id !== oldsnapshot.val().comment_id
+              );
+            });
+
+          firebase
+            .database()
+            .ref('comments')
+            .child(this.room_id)
+            .on('child_changed', (snapshot) => {
+              let index = this.comments.findIndex(
+                (comment) => comment.comment_id === snapshot.val().comment_id
+              );
+              this.comments.splice(index, 1, snapshot.val());
+            });
         } else {
           console.log('No data available');
         }
@@ -427,8 +449,8 @@ export default {
 
   beforeDestroy() {
     firebase.database().ref('users').off();
-    firebase.database().ref('comments').off();
     firebase.database().ref('threads').off();
+    firebase.database().ref('comments').off();
     firebase.database().ref('.info/connected').off();
     firebase.database().ref('connections').off();
   },
@@ -452,14 +474,13 @@ export default {
       }
 
       this.room_id = this.user.uid;
-      console.log(this.room_id);
 
       firebase.database().ref('users').child(this.user.uid).update({ lastRoom_id: this.room_id });
 
       firebase
         .database()
         .ref('comments')
-        .child(this.user.uid)
+        .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
 
@@ -467,6 +488,27 @@ export default {
             let display_bottom = document.getElementById('display');
             display_bottom.scrollTop = display_bottom.scrollHeight;
           });
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_removed', (oldsnapshot) => {
+          this.comments = this.comments.filter(
+            (comment) => comment.comment_id !== oldsnapshot.val().comment_id
+          );
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_changed', (snapshot) => {
+          let index = this.comments.findIndex(
+            (comment) => comment.comment_id === snapshot.val().comment_id
+          );
+          this.comments.splice(index, 1, snapshot.val());
         });
     },
 
@@ -497,6 +539,27 @@ export default {
             let display_bottom = document.getElementById('display');
             display_bottom.scrollTop = display_bottom.scrollHeight;
           });
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_removed', (oldsnapshot) => {
+          this.comments = this.comments.filter(
+            (comment) => comment.comment_id !== oldsnapshot.val().comment_id
+          );
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_changed', (snapshot) => {
+          let index = this.comments.findIndex(
+            (comment) => comment.comment_id === snapshot.val().comment_id
+          );
+          this.comments.splice(index, 1, snapshot.val());
         });
     },
 
@@ -545,6 +608,7 @@ export default {
         .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
+
           this.$nextTick(() => {
             let display_bottom = document.getElementById('display');
             display_bottom.scrollTop = display_bottom.scrollHeight;
@@ -555,10 +619,21 @@ export default {
         .database()
         .ref('comments')
         .child(this.room_id)
-        .on('child_removed', (snapshot) => {
-          this.comments.filter((comment) => {
-            comment.comment_id !== snapshot.val().comment_id;
-          });
+        .on('child_removed', (oldsnapshot) => {
+          this.comments = this.comments.filter(
+            (comment) => comment.comment_id !== oldsnapshot.val().comment_id
+          );
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_changed', (snapshot) => {
+          let index = this.comments.findIndex(
+            (comment) => comment.comment_id === snapshot.val().comment_id
+          );
+          this.comments.splice(index, 1, snapshot.val());
         });
     },
 
