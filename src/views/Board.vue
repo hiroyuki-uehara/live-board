@@ -272,13 +272,14 @@ export default {
     Header,
     Sidebar,
   },
-  beforeMount() {
-    this.user = firebase.auth().currentUser;
-  },
+  beforeMount() {},
   mounted() {
-    if (this.user.username === 'Jay Gatsby') {
-      this.isAdmin = true;
+    this.user = firebase.auth().currentUser;
+
+    if (this.room_id !== '') {
+      firebase.database().ref('comments').child(this.room_id).off();
     }
+
     firebase
       .database()
       .ref('.info/connected')
@@ -302,7 +303,57 @@ export default {
       .once('value', (snapshot) => {
         if (snapshot.exists()) {
           this.user.username = snapshot.val().username;
-          // this.memoThread(this.user.username);
+          this.user.lastRoom_id = snapshot.val().lastRoom_id;
+          if (this.user.username === 'Jay Gatsby') {
+            this.isAdmin = true;
+          }
+
+          firebase
+            .database()
+            .ref('comments')
+            .child(snapshot.val().lastRoom_id)
+            .on('child_added', (snapshot) => {
+              this.comments.push(snapshot.val());
+            });
+
+          firebase
+            .database()
+            .ref('threads')
+            .child(this.user.lastRoom_id)
+            .once('value', (snapshot) => {
+              if (snapshot.exists()) {
+                this.room = snapshot.val().thread_title;
+                this.thread_content = snapshot.val().thread_content;
+              }
+            });
+
+          if (this.user.lastRoom_id === this.user.uid) {
+            this.room = this.user.username;
+            this.email = this.user.email;
+            this.thread_content = '';
+          } else {
+            const chat_id = this.user.lastRoom_id
+              .replace(this.user.uid, '')
+              .replace('&', '')
+              .trim();
+
+            firebase
+              .database()
+              .ref('users')
+              .child(chat_id)
+              .once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                  this.room = snapshot.val().username;
+                  this.email = snapshot.val().email;
+                  this.thread_content = '';
+                }
+              });
+          }
+
+          this.$nextTick(() => {
+            let display_bottom = document.getElementById('display');
+            display_bottom.scrollTop = display_bottom.scrollHeight;
+          });
         } else {
           console.log('No data available');
         }
@@ -310,32 +361,6 @@ export default {
       .catch((error) => {
         console.error(error.message);
       });
-
-    // firebase
-    //   .database()
-    //   .ref('users')
-    //   .child(this.user.uid)
-    //   .once('value', (snapshot) => {
-    //     if (snapshot.exists()) {
-    //       this.room_id = snapshot.val().lastRoom_id;
-    //     } else {
-    //       console.log('No data available');
-    //     }
-    //     firebase
-    //       .database()
-    //       .ref('comments')
-    //       .child(this.room_id)
-    //       .on('child_added', (snapshot) => {
-    //         this.comments.push(snapshot.val());
-    //       });
-    //     this.$nextTick(() => {
-    //       let display_bottom = document.getElementById('display');
-    //       display_bottom.scrollTop = display_bottom.scrollHeight;
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.error(error.message);
-    //   });
 
     firebase
       .database()
@@ -410,7 +435,7 @@ export default {
 
   methods: {
     doWhatsoever() {
-      console.log(`Is this user Admin? ${this.isAdmin}`);
+      console.log(this.room_id);
     },
 
     memoThread(username) {
@@ -426,8 +451,9 @@ export default {
       }
 
       this.room_id = this.user.uid;
-      
-      // firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
+      console.log(this.room_id);
+
+      firebase.database().ref('users').child(this.user.uid).update({ lastRoom_id: this.room_id });
 
       firebase
         .database()
@@ -453,7 +479,7 @@ export default {
 
       this.room_id = thread.thread_id;
 
-      // firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
+      firebase.database().ref('users').child(this.user.uid).update({ lastRoom_id: this.room_id });
 
       this.email = '';
       this.thread_content = thread.thread_content;
@@ -501,12 +527,12 @@ export default {
       }
 
       if (this.user.uid > user.user_id) {
-        this.room_id = `${this.user.uid}-${user.user_id}`;
+        this.room_id = `${this.user.uid}&${user.user_id}`;
       } else {
-        this.room_id = `${user.user_id}-${this.user.uid}`;
+        this.room_id = `${user.user_id}&${this.user.uid}`;
       }
 
-      // firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
+      firebase.database().ref('users').child(this.user.uid).update({ lastRoom_id: this.room_id });
 
       this.room = user.username;
       this.email = user.email;
@@ -555,7 +581,6 @@ export default {
         .database()
         .ref('threads')
         .once('child_added', (snapshot) => {
-          console.log(this.room_id, snapshot.val().thread_id);
           if (this.room_id === snapshot.val().thread_id) {
             firebase.database().ref('comments').child(this.room_id).child(comment_id).update({
               isReadable: false,
