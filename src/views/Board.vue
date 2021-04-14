@@ -304,17 +304,10 @@ export default {
         if (snapshot.exists()) {
           this.user.username = snapshot.val().username;
           this.user.lastRoom_id = snapshot.val().lastRoom_id;
+          this.room_id = snapshot.val().lastRoom_id;
           if (this.user.username === 'Jay Gatsby') {
             this.isAdmin = true;
           }
-
-          firebase
-            .database()
-            .ref('comments')
-            .child(snapshot.val().lastRoom_id)
-            .on('child_added', (snapshot) => {
-              this.comments.push(snapshot.val());
-            });
 
           firebase
             .database()
@@ -349,6 +342,14 @@ export default {
                 }
               });
           }
+
+          firebase
+            .database()
+            .ref('comments')
+            .child(snapshot.val().lastRoom_id)
+            .on('child_added', (snapshot) => {
+              this.comments.push(snapshot.val());
+            });
 
           this.$nextTick(() => {
             let display_bottom = document.getElementById('display');
