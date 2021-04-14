@@ -295,47 +295,47 @@ export default {
         }
       });
 
-    // firebase
-    //   .database()
-    //   .ref('users')
-    //   .child(this.user.uid)
-    //   .once('value', (snapshot) => {
-    //     if (snapshot.exists()) {
-    //       this.user.username = snapshot.val().username;
-    //       this.memoThread(this.user.username);
-    //     } else {
-    //       console.log('No data available');
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error.message);
-    //   });
-
     firebase
       .database()
       .ref('users')
       .child(this.user.uid)
       .once('value', (snapshot) => {
         if (snapshot.exists()) {
-          this.room_id = snapshot.val().lastRoom_id;
+          this.user.username = snapshot.val().username;
+          // this.memoThread(this.user.username);
         } else {
           console.log('No data available');
         }
-        firebase
-          .database()
-          .ref('comments')
-          .child(this.room_id)
-          .on('child_added', (snapshot) => {
-            this.comments.push(snapshot.val());
-          });
-        this.$nextTick(() => {
-          let display_bottom = document.getElementById('display');
-          display_bottom.scrollTop = display_bottom.scrollHeight;
-        });
       })
       .catch((error) => {
         console.error(error.message);
       });
+
+    // firebase
+    //   .database()
+    //   .ref('users')
+    //   .child(this.user.uid)
+    //   .once('value', (snapshot) => {
+    //     if (snapshot.exists()) {
+    //       this.room_id = snapshot.val().lastRoom_id;
+    //     } else {
+    //       console.log('No data available');
+    //     }
+    //     firebase
+    //       .database()
+    //       .ref('comments')
+    //       .child(this.room_id)
+    //       .on('child_added', (snapshot) => {
+    //         this.comments.push(snapshot.val());
+    //       });
+    //     this.$nextTick(() => {
+    //       let display_bottom = document.getElementById('display');
+    //       display_bottom.scrollTop = display_bottom.scrollHeight;
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.error(error.message);
+    //   });
 
     firebase
       .database()
@@ -426,7 +426,8 @@ export default {
       }
 
       this.room_id = this.user.uid;
-      firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
+      
+      // firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
 
       firebase
         .database()
@@ -452,7 +453,7 @@ export default {
 
       this.room_id = thread.thread_id;
 
-      firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
+      // firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
 
       this.email = '';
       this.thread_content = thread.thread_content;
@@ -505,7 +506,7 @@ export default {
         this.room_id = `${user.user_id}-${this.user.uid}`;
       }
 
-      firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
+      // firebase.database.ref('users').child(this.user.user_id).update({ lastRoom_id: this.room_id });
 
       this.room = user.username;
       this.email = user.email;
