@@ -84,6 +84,7 @@
         <div id="edit" v-show="editModal">
           <div class="edit-wrapper" @click.stop>
             <div id="edit-box">
+              <span id="edit-message" class="text-muted"> edit mode </span>
               <font-awesome-icon
                 :icon="['far', 'window-close']"
                 class="edit-modal-icon text-muted"

@@ -24,6 +24,12 @@
         justify-content: center;
         align-items: center;
         position: relative;
+        #edit-message {
+          position: absolute;
+          top: 1.3rem;
+          right: 8rem;
+          font-size: 3rem;
+        }
         .edit-modal-icon {
           position: absolute;
           top: 1rem;
