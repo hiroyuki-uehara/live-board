@@ -22,6 +22,14 @@
         font-weight: bold;
       }
     }
+    #plus-circle {
+      font-size: 3rem;
+      &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+      }
+    }
+
     section {
       margin: 0 0 1rem 0;
       cursor: pointer;

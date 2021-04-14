@@ -140,7 +140,7 @@
           </div>
           <div class="ml-auto">
             <b-button variant="outline-primary" @click="doWhatsoever">
-              <span>status</span>
+              <span>do</span>
             </b-button>
           </div>
           <div>
@@ -776,6 +776,7 @@ export default {
     closeEditModal() {
       this.editModal = false;
       this.post_id = '';
+      this.clearComment();
     },
 
     isAuthor(comment) {

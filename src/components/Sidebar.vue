@@ -16,7 +16,7 @@
     </section>
     <div>
       <p>Threads</p>
-      <p @click="$emit('plus_clicked')">
+      <p @click="$emit('plus_clicked')" id="plus-circle">
         <font-awesome-icon :icon="['far', 'plus-circle']" class="pt-1 mr-3 text-muted" />
       </p>
     </div>
