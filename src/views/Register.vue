@@ -56,6 +56,11 @@
               <ul>
                 <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
               </ul>
+              <font-awesome-icon
+                :icon="['fal', 'check-square']"
+                class="hide-button text-muted"
+                @click="hideError"
+              />
             </div>
             <div v-else class="error-message" style="opacity: 0">
               <ul>
@@ -67,6 +72,7 @@
         </div>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -75,6 +81,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 import Header from '../components/Header.vue';
+import Footer from '../components/Footer.vue';
 
 export default {
   name: 'Register',
@@ -99,6 +106,7 @@ export default {
   },
   components: {
     Header,
+    Footer,
   },
   computed: {},
   methods: {
@@ -135,6 +143,9 @@ export default {
           this.email = '';
           this.password = '';
         });
+    },
+    hideError() {
+      this.errors = [];
     },
   },
 };

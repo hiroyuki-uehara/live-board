@@ -33,11 +33,11 @@
               <ul>
                 <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
               </ul>
-                <font-awesome-icon
-                  :icon="['fal', 'check-square']"
-                  class="hide-button"
-                  @click="hideError"
-                />
+              <font-awesome-icon
+                :icon="['fal', 'check-square']"
+                class="hide-button"
+                @click="hideError"
+              />
             </div>
             <div v-else class="error-message" style="opacity: 0">
               <ul>
