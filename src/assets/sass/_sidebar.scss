@@ -1,4 +1,40 @@
-@media screen and (max-width: 768px) {}
+@media screen and (max-width: 768px) {
+  #sidebar {
+    padding: 1rem 0 0 1.2rem;
+    div:first-child {
+      margin: 0 0 0.5rem 0;
+      span {
+        font-size: 2.6rem;
+        font-weight: bold;
+      }
+    }
+    span {
+      font-size: 1.6rem;
+    }
+    div {
+      margin: 0rem 0.5rem 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      p {
+        font-size: 2.4rem;
+        font-weight: bold;
+      }
+    }
+    #plus-circle {
+      font-size: 2.8rem;
+      &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+      }
+    }
+
+    section {
+      margin: 0 0 0 0;
+      cursor: pointer;
+    }
+  }
+}
 @media screen and (min-width: 768px) {
   #sidebar {
     padding: 2rem 0 0 2rem;
@@ -34,6 +70,5 @@
       margin: 0 0 1rem 0;
       cursor: pointer;
     }
-    
   }
 }

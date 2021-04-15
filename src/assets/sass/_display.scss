@@ -1,4 +1,116 @@
 @media screen and (max-width: 768px) {
+  #display {
+    background-color: sandybrown;
+    height: 55vh;
+    margin: 0 auto;
+    padding: 1rem 0.5rem 0 0;
+    overflow-y: auto;
+
+    .comment {
+      top: 0;
+      left: 0;
+      z-index: 16;
+      background-color: snow;
+      width: 95vw;
+      height: 13vh;
+      font-size: 2rem;
+      margin: 0rem auto 1rem;
+      padding: 1rem 1rem 0.5rem 1rem;
+      border-radius: 0.3rem;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      .display-icon {
+        z-index: 401;
+        position: absolute;
+        right: 0;
+        bottom: 0.5rem;
+        font-size: 2rem;
+        margin: 0rem;
+        color: gray;
+        &:hover {
+          cursor: pointer;
+          opacity: 0.8;
+        }
+      }
+      #identicon-size {
+        width: 4rem;
+        height: auto;
+      }
+      .comment-box {
+        width: 95vw;
+        height: 13vh;
+        margin-right: 0.5rem;
+        padding: 0.5rem 0rem 0.5rem 0;
+        position: relarive;
+        h1 {
+          z-index: 60;
+          position: absolute;
+          top: 0.2rem;
+          left: 1rem;
+          font-size: 1.4rem;
+          margin-left: 0rem;
+          margin-bottom: 0.4rem;
+        }
+        .readable {
+          z-index: 61;
+          position: absolute;
+          top: 0.2rem;
+          right: 1rem;
+          font-size: 1.8rem;
+          font-weight: bold;
+        }
+        div {
+          overflow-y: auto;
+          z-index: 16;
+          position: relative;
+          top: 1vh;
+          left: 1vw;
+          width: 57vw;
+          height: 5vh;
+
+          margin: 2rem 0 0 0;
+          padding: 0 0 0 0;
+          p {
+            font-size: 2rem;
+            margin-left: 1rem;
+            padding-right: 2rem;
+          }
+        }
+      }
+      #overlay {
+        z-index: 50;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 72vw;
+        height: 13vh;
+        background-color: rgba(245, 245, 175, 1);
+        margin: 0;
+        padding: 0;
+        border-radius: 0.3rem;
+      }
+      .toggle-box {
+        width: 95vw;
+        height: 13vh;
+        z-index: 400;
+        position: absolute;
+        padding-right: 2rem;
+        display: flex;
+        align-items: center;
+        border-radius: 0.3rem;
+        button {
+          width: 5rem;
+          height: 3.2rem;
+          font-size: 1.2rem;
+          &:first-child {
+            margin-right: 1rem;
+          }
+        }
+      }
+    }
+  }
 }
 @media screen and (min-width: 768px) {
   #display {

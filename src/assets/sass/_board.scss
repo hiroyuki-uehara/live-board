@@ -7,11 +7,7 @@
     overflow: hidden;
   }
   Header {
-    width: 100vw;
-    height: 10vh;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: none;
   }
   .row {
     width: 100vw;
@@ -21,7 +17,7 @@
     height: 20vh;
   }
   #main {
-    height: 70vh;
+    height: 80vh;
   }
 }
 @media screen and (min-width: 768px) {
@@ -45,7 +41,7 @@
     button {
       width: 8vw;
       height: 7vh;
-      display:flex;
+      display: flex;
       justify-content: center;
       align-items: center;
       margin: 1.8rem 2rem 0 0;

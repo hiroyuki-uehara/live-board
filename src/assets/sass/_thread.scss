@@ -1,4 +1,57 @@
-@media screen and (max-width: 768px) {}
+@media screen and (max-width: 768px) {
+  #thread {
+    z-index: 300;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    #thread-wrapper {
+      z-index: 310;
+      width: 50vw;
+      height: 65vh;
+      background-color: snow;
+      position: relative;
+      padding-top: 3rem;
+      .modal-icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 4rem;
+        margin: 2rem;
+        &:hover {
+          cursor: pointer;
+          opacity: 0.5;
+        }
+      }
+      #thread-box {
+        margin: 0 auto;
+        width: 40vw;
+        font-size: 2rem;
+        p {
+          font-size: 2rem;
+          margin: 0 auto 1rem;
+          font-weight: bold;
+        }
+        .thread-input {
+          font-size: 2rem;
+          margin: 1rem auto;
+          padding: 2rem 1rem;
+        }
+        button {
+          margin: 2rem auto;
+          font-size: 3rem;
+          width: 40vw;
+        }
+      }
+    }
+  }
+
+}
 @media screen and (min-width: 768px) {
   #thread {
     z-index: 300;

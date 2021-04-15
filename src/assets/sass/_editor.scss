@@ -1,4 +1,44 @@
-@media screen and (max-width: 768px) {}
+@media screen and (max-width: 768px) {
+  #editor {
+    background-color: pink;
+    width: 100vw;
+    height: 18vh;
+    margin: 0 auto;
+    padding: 1rem 0.5rem 0.5rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    textarea {
+      resize: none;
+      width: 95vw;
+      height: 16.5vh;
+      border: 0.1rem solid lightgray;
+      border-radius: 0.3rem;
+      padding: 0.5rem 0.5rem 1rem 1rem;
+      font-size: 2rem;
+      overflow-y: auto;
+    }
+    .clear-button {
+      position: absolute;
+      bottom: 1.5vh;
+      right: 30vw;
+      width: 23vw;
+      height: 4vh;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .reply-button {
+      position: absolute;
+      bottom: 1.5vh;
+      right: 5vw;
+      width: 23vw;
+      height: 4vh;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  }
+}
 @media screen and (min-width: 768px) {
   #editor {
     background-color: pink;

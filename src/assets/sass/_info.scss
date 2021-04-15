@@ -1,4 +1,37 @@
-@media screen and (max-width: 768px) {}
+@media screen and (max-width: 768px) {
+  #info {
+    background-color: pink;
+    height: 7vh;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem 0 0;
+    div {
+      margin-left: 1rem;
+    }
+    #info-message {
+      display: flex;
+      align-items: center;
+      p {
+        font-size: 2rem;
+        margin-left: 0.5rem;
+        margin-right: 3rem;
+        color: black;
+        &:last-child {
+          display: none;
+        }
+      }
+    }
+    button {
+      width: 20vw;
+      height: 5vh;
+      span {
+        font-size: 1.2rem;
+        color: gray;
+      }
+    }
+  }
+}
 @media screen and (min-width: 768px) {
   #info {
     background-color: pink;

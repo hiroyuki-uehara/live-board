@@ -169,8 +169,13 @@
                 </span>
               </template>
             </span>
-            <div style="z-index: 60">
-              <v-gravatar :email="comment.email" :size="50" default-img="identicon" />
+            <div style="z-index: 60" id="identicon-box">
+              <v-gravatar
+                :email="comment.email"
+                :size="50"
+                default-img="identicon"
+                id="identicon-size"
+              />
             </div>
             <div class="comment-box">
               <h1>{{ comment.username }}</h1>
