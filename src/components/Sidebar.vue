@@ -14,21 +14,23 @@
         ><strong> {{ username }} </strong><span class="ml-3 text-muted">you</span>
       </span>
     </section>
-    <div>
+    <div class="sp_sidebar"><p>SP Threads</p></div>
+    <section class="sp_sidebar"><p>dummy</p></section>
+    <div class="pc_sidebar plus-circle-box">
       <p>Threads</p>
       <p @click="$emit('plus_clicked')" id="plus-circle">
-        <font-awesome-icon :icon="['far', 'plus-circle']" class="pt-1 mr-3 text-muted" />
+        <font-awesome-icon :icon="['far', 'plus-circle']" class="pt-1 text-muted mr-3" />
       </p>
     </div>
     <section
       v-for="thread in threads"
       :key="thread.thread_id"
       @click="$emit('thread_clicked', thread)"
+      class="pc_sidebar"
     >
       <font-awesome-icon :icon="['fal', 'question-circle']" style="font-size: 2rem" class="mr-3" />
       <span>{{ thread.thread_title }}</span>
     </section>
-    <div><p>Direct Messages</p></div>
     <slot></slot>
   </div>
 </template>

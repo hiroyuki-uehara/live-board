@@ -24,7 +24,17 @@
         @thread_clicked="discussionThread"
         @plus_clicked="showThreadModal"
       >
-        <section v-for="user in otherUsers" :key="user.user_id" @click="chatThread(user)">
+        <div class="sp_sidebar"><p>SP Direct Messages</p></div>
+        <section class="sp_sidebar"><p>dummy</p></section>
+        <div class="pc_sidebar mb-3">
+          <p style="font-size: 2.5rem; font-weight: bold">Direct Messages</p>
+        </div>
+        <section
+          v-for="user in otherUsers"
+          :key="user.user_id"
+          @click="chatThread(user)"
+          class="pc_sidebar"
+        >
           <span v-if="isOnline(user)">
             <font-awesome-icon
               :icon="['fas', 'circle']"

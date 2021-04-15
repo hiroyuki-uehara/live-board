@@ -1,5 +1,11 @@
 @media screen and (max-width: 768px) {
   #sidebar {
+    .sp_sidebar {
+      display: block;
+    }
+    .pc_sidebar {
+      display: none;
+    }
     padding: 1rem 0 0 1.2rem;
     div:first-child {
       margin: 0 0 0.5rem 0;
@@ -37,6 +43,12 @@
 }
 @media screen and (min-width: 768px) {
   #sidebar {
+    .sp_sidebar {
+      display: none;
+    }
+    .pc_sidebar {
+      display: block;
+    }
     padding: 2rem 0 0 2rem;
     div:first-child {
       margin: 0 0 1rem 0;
@@ -48,7 +60,7 @@
     span {
       font-size: 2rem;
     }
-    div {
+    .plus-circle-box {
       margin: 1rem 0.5rem;
       display: flex;
       justify-content: space-between;
@@ -57,12 +69,12 @@
         font-size: 2.5rem;
         font-weight: bold;
       }
-    }
-    #plus-circle {
-      font-size: 3rem;
-      &:hover {
-        cursor: pointer;
-        opacity: 0.8;
+      #plus-circle {
+        font-size: 3rem;
+        &:hover {
+          cursor: pointer;
+          opacity: 0.8;
+        }
       }
     }
 
