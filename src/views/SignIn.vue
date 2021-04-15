@@ -2,11 +2,9 @@
   <div class="container">
     <div id="main">
       <div id="auth-box">
-        <router-link to="/register">
-          <div class="text-center text-muted">
-            <font-awesome-icon :icon="['fas', 'chalkboard']" style="font-size: 4rem" />
-          </div>
-        </router-link>
+        <div class="text-center text-muted">
+          <font-awesome-icon :icon="['fas', 'chalkboard']" style="font-size: 4rem" />
+        </div>
         <h1 class="text-center text-muted my-3">
           Sign in to
           <strong> Live Board </strong>
@@ -35,11 +33,11 @@
               <ul>
                 <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
               </ul>
-              <font-awesome-icon
-                :icon="['fal', 'check-square']"
-                class="ml-3 hide-button"
-                @click="hideError"
-              />
+                <font-awesome-icon
+                  :icon="['fal', 'check-square']"
+                  class="hide-button"
+                  @click="hideError"
+                />
             </div>
             <div v-else class="error-message" style="opacity: 0">
               <ul>
@@ -48,7 +46,7 @@
             </div>
             <b-button type="submit" variant="success btn-block">Sign in</b-button>
           </b-form>
-          <div>
+          <div class="bottom-info">
             <p>
               <span>New to Live Board? </span>
               <router-link to="/register">
@@ -59,12 +57,15 @@
         </div>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import firebase from 'firebase/app';
 import 'firebase/auth';
+
+import Footer from '../components/Footer.vue';
 
 export default {
   name: 'SignIn',
@@ -77,7 +78,9 @@ export default {
       errors: [],
     };
   },
-  components: {},
+  components: {
+    Footer,
+  },
   mounted() {
     firebase
       .database()

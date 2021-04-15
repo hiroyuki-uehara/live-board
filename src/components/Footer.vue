@@ -1,7 +1,7 @@
 <template>
   <footer>
     <div>
-      <a href="https://shinshumedicalcenter.jp/" target="_blank">
+      <a href="https://shinshumedicalcenter.jp/information/3742/" target="_blank">
         <font-awesome-icon
           :icon="['far', 'hospital-alt']"
           style="color: white; font-size: 2rem"
