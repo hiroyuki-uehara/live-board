@@ -24,29 +24,35 @@
         @thread_clicked="discussionThread"
         @plus_clicked="showThreadModal"
       >
-        <div class="sp_sidebar"><p>SP Direct Messages</p></div>
-        <section
-          v-for="user in otherUsers"
-          :key="user.user_id"
-          @click="chatThread(user)"
-          class="sp_sidebar"
-        >
-          <span v-if="isOnline(user)">
-            <font-awesome-icon
-              :icon="['fas', 'circle']"
-              style="color: orange; font-size: 1.5rem"
-              class="mr-3"
-            />
-          </span>
-          <span v-else>
-            <font-awesome-icon
-              :icon="['fas', 'circle']"
-              style="color: gray; font-size: 1.5rem"
-              class="mr-3"
-            />
-          </span>
-          <span>{{ user.username }}</span>
-        </section>
+        <b-dropdown class="sp_sidebar sidebar_dropdown_message" block variant="outline-light"
+          ><template #button-content>
+            <span style="font-size: 1.6rem; font-weight: bold">Direct Messages&nbsp;</span>
+          </template>
+
+          <b-dropdown-item
+            v-for="user in otherUsers"
+            :key="user.user_id"
+            @click="chatThread(user)"
+            class="sp_sidebar"
+          >
+            <span v-if="isOnline(user)">
+              <font-awesome-icon
+                :icon="['fas', 'circle']"
+                style="color: orange; font-size: 1.5rem"
+                class="mr-3"
+              />
+            </span>
+            <span v-else>
+              <font-awesome-icon
+                :icon="['fas', 'circle']"
+                style="color: gray; font-size: 1.5rem"
+                class="mr-3"
+              />
+            </span>
+            <span>{{ user.username }}</span>
+          </b-dropdown-item>
+        </b-dropdown>
+
         <div class="pc_sidebar mb-3">
           <p style="font-size: 2.5rem; font-weight: bold">Direct Messages</p>
         </div>
@@ -211,7 +217,7 @@
             <div class="comment-box">
               <h1>{{ comment.username }}</h1>
               <span class="readable" v-if="isAdmin === true"
-                ><small class="text-muted mr-4">Readable?</small>{{ comment.isReadable }}</span
+                ><small class="text-muted mr-3">Readable?</small>{{ comment.isReadable }}</span
               >
               <div>
                 <p>{{ comment.content }}</p>

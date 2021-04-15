@@ -47,7 +47,7 @@
         h1 {
           z-index: 60;
           position: absolute;
-          top: 0.2rem;
+          top: 0.5rem;
           left: 1rem;
           font-size: 1.4rem;
           margin-left: 0rem;
@@ -60,6 +60,11 @@
           right: 1rem;
           font-size: 1.8rem;
           font-weight: bold;
+          small {
+            font-size: 1.6rem;
+
+          }
+          
         }
         div {
           overflow-y: auto;
@@ -96,6 +101,7 @@
         height: 13vh;
         z-index: 400;
         position: absolute;
+        margin-bottom: 1rem;
         padding-right: 2rem;
         display: flex;
         align-items: center;

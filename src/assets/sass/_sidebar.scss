@@ -7,12 +7,16 @@
       display: none;
     }
     padding: 1rem 0 0 1.2rem;
+    position: relative;
     div:first-child {
       margin: 0 0 0.5rem 0;
       span {
         font-size: 2.6rem;
         font-weight: bold;
       }
+    }
+    .sp_username {
+      margin-left: 0.5rem;
     }
     span {
       font-size: 1.6rem;
@@ -23,16 +27,21 @@
       justify-content: space-between;
       align-items: center;
       p {
-        font-size: 2.4rem;
+        font-size: 2rem;
         font-weight: bold;
       }
     }
-    #plus-circle {
-      font-size: 2.8rem;
-      &:hover {
-        cursor: pointer;
-        opacity: 0.8;
-      }
+    .sidebar_dropdown {
+      margin-top: 0.5rem;
+      margin-right: 1rem;
+    }
+
+    .sp-plus-circle {
+      position: absolute;
+      top: 5.8vh;
+      right: 2vw;
+      margin-right: 0.5rem;
+      font-size: 1.4rem;
     }
 
     section {
@@ -69,7 +78,7 @@
         font-size: 2.5rem;
         font-weight: bold;
       }
-      #plus-circle {
+      .pc-plus-circle {
         font-size: 3rem;
         &:hover {
           cursor: pointer;
