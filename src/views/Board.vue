@@ -25,7 +25,28 @@
         @plus_clicked="showThreadModal"
       >
         <div class="sp_sidebar"><p>SP Direct Messages</p></div>
-        <section class="sp_sidebar"><p>dummy</p></section>
+        <section
+          v-for="user in otherUsers"
+          :key="user.user_id"
+          @click="chatThread(user)"
+          class="sp_sidebar"
+        >
+          <span v-if="isOnline(user)">
+            <font-awesome-icon
+              :icon="['fas', 'circle']"
+              style="color: orange; font-size: 1.5rem"
+              class="mr-3"
+            />
+          </span>
+          <span v-else>
+            <font-awesome-icon
+              :icon="['fas', 'circle']"
+              style="color: gray; font-size: 1.5rem"
+              class="mr-3"
+            />
+          </span>
+          <span>{{ user.username }}</span>
+        </section>
         <div class="pc_sidebar mb-3">
           <p style="font-size: 2.5rem; font-weight: bold">Direct Messages</p>
         </div>

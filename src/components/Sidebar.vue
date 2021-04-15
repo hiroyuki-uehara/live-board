@@ -15,7 +15,15 @@
       </span>
     </section>
     <div class="sp_sidebar"><p>SP Threads</p></div>
-    <section class="sp_sidebar"><p>dummy</p></section>
+    <section
+      v-for="thread in threads"
+      :key="thread.thread_id"
+      @click="$emit('thread_clicked', thread)"
+      class="sp_sidebar"
+    >
+      <font-awesome-icon :icon="['fal', 'question-circle']" style="font-size: 2rem" class="mr-3" />
+      <span>{{ thread.thread_title }}</span>
+    </section>
     <div class="pc_sidebar plus-circle-box">
       <p>Threads</p>
       <p @click="$emit('plus_clicked')" id="plus-circle">
