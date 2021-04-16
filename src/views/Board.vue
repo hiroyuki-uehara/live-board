@@ -455,10 +455,18 @@ export default {
 
     firebase
       .database()
+      .ref('threads')
+      .on('child_added', (snapshot) => {
+        this.threads.push(snapshot.val());
+      });
+
+    firebase
+      .database()
       .ref('connections')
       .on('child_added', (snapshot) => {
         let new_connection = snapshot.val();
         this.connections.push(new_connection);
+
         this.users.forEach((user) => {
           if (user.user_id === new_connection.user_id) {
             user.status = 'online';
@@ -473,35 +481,19 @@ export default {
 
     firebase
       .database()
-      .ref('threads')
-      .on('child_added', (snapshot) => {
-        this.threads.push(snapshot.val());
-      });
-
-    firebase
-      .database()
       .ref('connections')
-      .on('child_removed', (snapshot) => {
-        let remove_connection = snapshot.val();
+      .on('child_removed', (oldsnapshot) => {
+        let remove_connection = oldsnapshot.val();
 
-        this.connections = Object.values(this.connections).filter((connection) => {
-          return connection.connection_id !== remove_connection.connection_id;
-        });
+        this.connections = Object.values(this.connections).filter(
+          (connection) => connection.connection_id !== remove_connection.connection_id
+        );
 
-        // let index = this.connections.findIndex((connection) => {
-        //   return connection.user_id === remove_connection.user_id;
-        // });
+        let offlineUser = this.otherUsers.find(
+          (user) => user.user_id === remove_connection.user_id
+        );
 
-        let i = -1;
-        Object.values(this.connections).filter((connection, index) => {
-          i = index;
-          return connection.user_id === remove_connection.user_id;
-        });
-
-        if (i === -1) {
-          let user = this.users.find((user) => user.user_id === remove_connection.user_id);
-          user.status = 'offline';
-        }
+        offlineUser.status = 'offline';
       });
   },
 
