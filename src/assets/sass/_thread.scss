@@ -12,17 +12,17 @@
     align-items: center;
     #thread-wrapper {
       z-index: 310;
-      width: 50vw;
+      width: 95vw;
       height: 65vh;
       background-color: snow;
       position: relative;
-      padding-top: 3rem;
+      padding-top: 5rem;
       .modal-icon {
         position: absolute;
         top: 0;
         right: 0;
-        font-size: 4rem;
-        margin: 2rem;
+        font-size: 3rem;
+        margin: 1rem;
         &:hover {
           cursor: pointer;
           opacity: 0.5;
@@ -30,11 +30,11 @@
       }
       #thread-box {
         margin: 0 auto;
-        width: 40vw;
+        width: 90vw;
         font-size: 2rem;
         p {
           font-size: 2rem;
-          margin: 0 auto 1rem;
+          margin: 0 auto 3rem;
           font-weight: bold;
         }
         .thread-input {
@@ -43,9 +43,10 @@
           padding: 2rem 1rem;
         }
         button {
-          margin: 2rem auto;
-          font-size: 3rem;
-          width: 40vw;
+          margin: 4rem auto 2rem;
+          padding: 1rem;
+          font-size: 2rem;
+          width: 90vw;
         }
       }
     }
