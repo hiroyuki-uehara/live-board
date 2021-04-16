@@ -489,11 +489,11 @@ export default {
           (connection) => connection.connection_id !== remove_connection.connection_id
         );
 
-        let offlineUser = this.otherUsers.find(
-          (user) => user.user_id === remove_connection.user_id
-        );
-
-        offlineUser.status = 'offline';
+        this.otherUsers.forEach((user) => {
+          if (user.user_id === remove_connection.user_id) {
+            user.status = 'offline';
+          }
+        });
       });
   },
 
