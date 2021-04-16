@@ -96,6 +96,18 @@
         padding: 0;
         border-radius: 0.3rem;
       }
+      #adminOverlay {
+        z-index: 50;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 95vw;
+        height: 13vh;
+        background-color: rgba(100, 245, 175, 0.5);
+        margin: 0;
+        padding: 0;
+        border-radius: 0.3rem;
+      }
       .toggle-box {
         width: 95vw;
         height: 13vh;
@@ -205,6 +217,18 @@
         width: 72vw;
         height: 13vh;
         background-color: rgba(245, 245, 175, 1);
+        margin: 0;
+        padding: 0;
+        border-radius: 0.3rem;
+      }
+      #adminOverlay {
+        z-index: 50;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 72vw;
+        height: 13vh;
+        background-color: rgba(100, 245, 175, 0.5);
         margin: 0;
         padding: 0;
         border-radius: 0.3rem;

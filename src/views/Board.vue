@@ -230,6 +230,7 @@
               </div>
             </div>
             <div id="overlay" v-if="hideComment(comment)"></div>
+            <div id="adminOverlay" v-if="adminComment(comment)"></div>
             <div class="toggle-box">
               <b-button
                 variant="outline-primary"
@@ -879,8 +880,17 @@ export default {
         return false;
       } else if (comment.isReadable === true) {
         return false;
+      } else if (this.isAdmin === true) {
+        return false;
       } else {
         return true;
+      }
+    },
+    adminComment(comment) {
+      if (this.isAdmin === true && comment.isReadable === false) {
+        return true;
+      } else {
+        return false;
       }
     },
   },
