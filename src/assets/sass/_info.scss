@@ -1,11 +1,21 @@
 @media screen and (max-width: 768px) {
   #info {
+    .sp_sidebar {
+      display: block;
+    }
+    .pc_sidebar {
+      display: none;
+    }
     background-color: pink;
     height: 7vh;
     margin: 0 auto;
     display: flex;
     align-items: center;
     padding: 0 1rem 0 0;
+    #sp-identicon {
+      width: 3.2rem;
+      height: auto;
+    }
     div {
       margin-left: 1rem;
     }
@@ -15,18 +25,15 @@
       p {
         font-size: 2rem;
         margin-left: 0.5rem;
-        margin-right: 3rem;
+        margin-right: 0.5rem;
         color: black;
-        &:last-child {
-          display: none;
-        }
       }
     }
     button {
-      width: 20vw;
+      width: 16vw;
       height: 5vh;
       span {
-        font-size: 1.2rem;
+        font-size: 1rem;
         color: gray;
       }
     }
@@ -34,6 +41,12 @@
 }
 @media screen and (min-width: 768px) {
   #info {
+    .sp_sidebar {
+      display: none;
+    }
+    .pc_sidebar {
+      display: block;
+    }
     background-color: pink;
     width: 75vw;
     height: 10vh;

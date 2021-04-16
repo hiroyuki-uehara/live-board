@@ -14,7 +14,11 @@
         ><strong> {{ username }} </strong><span class="ml-3 text-muted">you</span>
       </span>
     </section>
-    <b-button variant="outline-info" @click="$emit('plus_clicked')" class="sp-plus-circle">
+    <b-button
+      variant="outline-info"
+      @click="$emit('plus_clicked')"
+      class="sp-plus-circle sp_sidebar"
+    >
       Create New Thread
     </b-button>
     <b-dropdown class="sp_sidebar sidebar_dropdown" block variant="outline-light">

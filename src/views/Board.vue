@@ -159,7 +159,7 @@
         <!-- <Info> -->
         <div id="info">
           <div v-if="this.email != ''">
-            <v-gravatar :email="email" :size="40" default-img="identicon" />
+            <v-gravatar :email="email" :size="40" default-img="identicon" id="sp-identicon" />
           </div>
           <div v-else>
             <font-awesome-icon :icon="['fal', 'question-circle']" style="font-size: 3rem" />
@@ -174,7 +174,13 @@
                 >you</small
               >
             </p>
-            <p>{{ thread_content }}</p>
+            <p class="pc_sidebar">{{ thread_content }}</p>
+
+            <div class="sp_sidebar text-center my-3" v-if="this.thread_content != ''">
+              <b-button v-b-tooltip.hover.bottom :title="thread_content" variant="outline-dark"
+                >Question</b-button
+              >
+            </div>
           </div>
           <div class="ml-auto">
             <b-button variant="outline-primary" @click="doWhatsoever">

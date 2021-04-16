@@ -13,8 +13,8 @@
     align-items: flex-end;
     .edit-wrapper {
       #edit-box {
-        width: 75vw;
-        height: 20vh;
+        width: 100vw;
+        height: 18vh;
         margin-right: 0rem;
         background-color: pink;
         border-radius: 0.3rem;
@@ -24,14 +24,14 @@
         position: relative;
         #edit-message {
           position: absolute;
-          top: 1.3rem;
-          right: 8rem;
-          font-size: 3rem;
+          top: 1.5rem;
+          right: 6rem;
+          font-size: 1.6rem;
         }
         .edit-modal-icon {
           position: absolute;
-          top: 1rem;
-          right: 1rem;
+          top: 0rem;
+          right: 0rem;
           font-size: 2.6rem;
           margin: 1.6rem 2.2rem 0 0;
           &:hover {
@@ -41,8 +41,8 @@
         }
         textarea {
           resize: none;
-          width: 74vw;
-          height: 18vh;
+          width: 95vw;
+          height: 16.5vh;
           font-size: 2.2rem;
           border-radius: 0.3rem;
           border: none;
@@ -51,21 +51,21 @@
         .edit-clear-button {
           position: absolute;
           z-index: 11;
-          bottom: 2vh;
-          right: 10vw;
-          width: 8vw;
-          height: 6vh;
-          font-size: 2.2rem;
+          bottom: 1.5vh;
+          right: 30vw;
+          width: 23vw;
+          height: 4vh;
+          font-size: 1.2rem;
           font-weight: bold;
         }
         .edit-reply-button {
           position: absolute;
           z-index: 11;
-          bottom: 2vh;
-          right: 1vw;
-          width: 8vw;
-          height: 6vh;
-          font-size: 2.2rem;
+          bottom: 1.5vh;
+          right: 4vw;
+          width: 23vw;
+          height: 4vh;
+          font-size: 1.2rem;
           font-weight: bold;
         }
 
