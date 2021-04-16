@@ -334,7 +334,7 @@ export default {
       .database()
       .ref('.info/connected')
       .on('value', (snapshot) => {
-        if (snapshot.val() === true) {
+        if (snapshot.val() === true && alreadyOnline === false) {
           let ref = this.connectionRef.push();
           this.connection_id = ref.key;
           ref.onDisconnect().remove();
