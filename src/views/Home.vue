@@ -50,7 +50,7 @@
         </article>
       </section>
       <section>
-        <img src="../assets/images/physics01.jpg" alt="" class="photo" />
+        <img src="../assets/images/life01.jpg" alt="" class="photo" />
         <article class="en-legend">
           <h1>Physics</h1>
           <p>What makes life possible?</p>
