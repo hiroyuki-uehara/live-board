@@ -1,0 +1,80 @@
+@media screen and (max-width: 768px) {
+  #info {
+    .sp_sidebar {
+      display: block;
+    }
+    .pc_sidebar {
+      display: none;
+    }
+    background-color: pink;
+    height: 7vh;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem 0 0;
+    #sp-identicon {
+      width: 3.2rem;
+      height: auto;
+    }
+    div {
+      margin-left: 0.8rem;
+    }
+    #info-message {
+      display: flex;
+      align-items: center;
+      p {
+        font-size: 1.8rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        color: black;
+      }
+    }
+    button {
+      width: 15vw;
+      height: 4vh;
+
+      span {
+        font-size: 1rem;
+        color: gray;
+      }
+    }
+  }
+}
+@media screen and (min-width: 768px) {
+  #info {
+    .sp_sidebar {
+      display: none;
+    }
+    .pc_sidebar {
+      display: block;
+    }
+    background-color: pink;
+    width: 75vw;
+    height: 10vh;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    div {
+      margin-left: 1rem;
+    }
+    #info-message {
+      display: flex;
+      align-items: center;
+      p {
+        font-size: 2.2rem;
+        margin-left: 0.5rem;
+        margin-right: 3rem;
+        color: black;
+      }
+    }
+    button {
+      width: 6vw;
+      height: 6vh;
+      span {
+        font-size: 1.4rem;
+        color: gray;
+      }
+    }
+  }
+}
