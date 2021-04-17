@@ -18,6 +18,7 @@
       variant="outline-info"
       @click="$emit('plus_clicked')"
       class="sp-plus-circle sp_sidebar"
+      v-if="isAdmin"
     >
       Create New Thread
     </b-button>

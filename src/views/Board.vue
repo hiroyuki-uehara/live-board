@@ -183,15 +183,15 @@
             </p>
             <p class="pc_sidebar">{{ thread_content }}</p>
 
-            <div class="sp_sidebar text-center my-3" v-if="this.thread_content != ''">
+            <div class="sp_sidebar" v-if="this.thread_content != ''">
               <b-button v-b-tooltip.hover.bottom :title="thread_content" variant="outline-dark"
-                >Question</b-button
-              >
+                ><span>Question</span>
+              </b-button>
             </div>
           </div>
           <div class="ml-auto">
-            <b-button variant="outline-primary" @click="doWhatsoever">
-              <span>do</span>
+            <b-button class="sp_sidebar" variant="outline-success" @click="showHomeModal">
+              <span>Home</span>
             </b-button>
           </div>
           <div>
@@ -437,8 +437,6 @@ export default {
                 (comment) => comment.comment_id === snapshot.val().comment_id
               );
               Object.values(this.comments)[changedIndex].isReadable = snapshot.val().isReadable;
-              console.log(snapshot.val().isReadable);
-              console.log(Object.values(this.comments)[changedIndex].isReadable);
             });
         }
       });
@@ -513,10 +511,6 @@ export default {
   computed: {},
 
   methods: {
-    doWhatsoever() {
-      return true;
-    },
-
     memoThread() {
       this.comments = [];
       this.thread_content = '';

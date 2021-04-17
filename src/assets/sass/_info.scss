@@ -17,21 +17,22 @@
       height: auto;
     }
     div {
-      margin-left: 1rem;
+      margin-left: 0.8rem;
     }
     #info-message {
       display: flex;
       align-items: center;
       p {
-        font-size: 2rem;
+        font-size: 1.8rem;
         margin-left: 0.5rem;
         margin-right: 0.5rem;
         color: black;
       }
     }
     button {
-      width: 16vw;
-      height: 5vh;
+      width: 15vw;
+      height: 4vh;
+
       span {
         font-size: 1rem;
         color: gray;

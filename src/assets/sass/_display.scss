@@ -2,8 +2,10 @@
   #display {
     background-color: sandybrown;
     height: 55vh;
-    margin: 0 auto;
-    padding: 1rem 0.5rem 0 0;
+    margin: 0 auto 0;
+    padding: 1rem 0.5rem 0rem;
+    overflow-y: auto;
+    overflow-x: hidden;
     .comment {
       top: 0;
       left: 0;
@@ -38,6 +40,7 @@
       }
       .comment-box {
         overflow-y: auto;
+        overflow-x: hidden;
         width: 95vw;
         height: 13vh;
         margin-right: 0.5rem;
@@ -64,12 +67,13 @@
           }
         }
         #comment-content {
-          z-index: 1;
+          z-index: 50;
           position: relative;
           top: 1vh;
           left: 1vw;
-          width: 57vw;
+          width: 80vw;
           height: 5vh;
+          overflow-x: hidden;
           overflow-y: auto;
           margin: 2rem 0 0 0;
           padding: 0 0 0 0;
