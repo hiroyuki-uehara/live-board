@@ -555,12 +555,10 @@ export default {
         .ref('comments')
         .child(this.room_id)
         .on('child_changed', (snapshot) => {
-          let i = 0;
-          Object.values(this.comments).filter((comment, index) => {
-            i = index;
-            return comment.comment_id === snapshot.val().comment_id;
-          });
-          Object.values(this.comments).splice(i, 1, snapshot.val());
+          const changedIndex = Object.values(this.comments).findIndex(
+            (comment) => comment.comment_id === snapshot.val().comment_id
+          );
+          Object.values(this.comments)[changedIndex].isReadable = snapshot.val().isReadable;
         });
     },
 
@@ -608,12 +606,10 @@ export default {
         .ref('comments')
         .child(this.room_id)
         .on('child_changed', (snapshot) => {
-          let i = 0;
-          Object.values(this.comments).filter((comment, index) => {
-            i = index;
-            return comment.comment_id === snapshot.val().comment_id;
-          });
-          Object.values(this.comments).splice(i, 1, snapshot.val());
+          const changedIndex = Object.values(this.comments).findIndex(
+            (comment) => comment.comment_id === snapshot.val().comment_id
+          );
+          Object.values(this.comments)[changedIndex].isReadable = snapshot.val().isReadable;
         });
     },
 
@@ -684,12 +680,10 @@ export default {
         .ref('comments')
         .child(this.room_id)
         .on('child_changed', (snapshot) => {
-          let i = 0;
-          Object.values(this.comments).filter((comment, index) => {
-            i = index;
-            return comment.comment_id === snapshot.val().comment_id;
-          });
-          Object.values(this.comments).splice(i, 1, snapshot.val());
+          const changedIndex = Object.values(this.comments).findIndex(
+            (comment) => comment.comment_id === snapshot.val().comment_id
+          );
+          Object.values(this.comments)[changedIndex].isReadable = snapshot.val().isReadable;
         });
     },
 

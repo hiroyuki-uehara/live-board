@@ -23,6 +23,7 @@
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
     "firebase": "^8.3.2",
+    "git": "^0.1.5",
     "gravatar": "^1.8.1",
     "vue": "^2.6.12",
     "vue-gravatar": "^1.4.1",
