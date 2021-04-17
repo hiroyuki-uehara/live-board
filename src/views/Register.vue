@@ -3,11 +3,11 @@
     <Header>
       <div><p class="header-title ml-5">Register</p></div>
       <div>
-        <router-link to="/" class="my-auto ml-auto mr-3">
-          <b-button variant="outline-success"><p>Home</p></b-button>
+        <router-link to="/" class="my-auto ml-auto">
+          <b-button class="signup-button" variant="outline-success"><p>Home</p></b-button>
         </router-link>
-        <router-link to="/signin" class="my-auto mr-3">
-          <b-button variant="outline-secondary"><p>Sign in</p></b-button>
+        <router-link to="/signin" class="my-auto ml-3 mr-3">
+          <b-button class="signup-button" variant="outline-secondary"><p>Sign in</p></b-button>
         </router-link>
       </div>
     </Header>
@@ -56,6 +56,11 @@
               <ul>
                 <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
               </ul>
+              <font-awesome-icon
+                :icon="['fal', 'check-square']"
+                class="hide-button text-muted"
+                @click="hideError"
+              />
             </div>
             <div v-else class="error-message" style="opacity: 0">
               <ul>
@@ -67,19 +72,23 @@
         </div>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 import Header from '../components/Header.vue';
+import Footer from '../components/Footer.vue';
 
 export default {
   name: 'Register',
   data() {
     return {
+      users: [],
       username: '',
       email: '',
       password: '',
@@ -94,13 +103,31 @@ export default {
         'Mordred',
         'Constantine',
         'Bedivere',
+        'Gareth',
       ],
+      usedNicknames: [],
+      availableNicknames: [],
+      newNickname: '',
     };
   },
   components: {
     Header,
+    Footer,
   },
   computed: {},
+  mounted() {
+    firebase
+      .database()
+      .ref('users')
+      .once('value', (snapshot) => {
+        Object.values(snapshot.val()).forEach((user) => {
+          this.usedNicknames.push(user.nickname);
+        });
+        this.availableNicknames = this.nicknames.filter(
+          (name) => !this.usedNicknames.includes(name)
+        );
+      });
+  },
   methods: {
     registerUser() {
       this.errors = [];
@@ -109,6 +136,7 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
           const user = response.user;
+          this.newNickname = this.availableNicknames.shift();
           firebase
             .database()
             .ref('users')
@@ -117,9 +145,11 @@ export default {
               user_id: user.uid,
               username: this.username,
               email: user.email,
+              lastRoom_id: user.uid,
+              nickname: this.newNickname,
             })
             .then(() => {
-              this.$router.push('/');
+              this.$router.push('/board');
             })
             .catch((error) => {
               this.errors.push(error.message);
@@ -134,6 +164,9 @@ export default {
           this.email = '';
           this.password = '';
         });
+    },
+    hideError() {
+      this.errors = [];
     },
   },
 };

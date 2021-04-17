@@ -6,22 +6,36 @@
     max-height: 100%;
     overflow: hidden;
   }
+  #home-modal {
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
   Header {
-    width: 100vw;
-    height: 10vh;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: none;
   }
   .row {
     width: 100vw;
     height: 70vh;
   }
   #sidebar {
+    .sp_sidebar {
+      display: block;
+    }
+    .pc_sidebar {
+      display: none;
+    }
     height: 20vh;
+    .sidebar_dropdown_message {
+      margin-top: 0.5rem;
+      margin-right: 1rem;
+    }
   }
   #main {
-    height: 70vh;
+    height: 80vh;
   }
 }
 @media screen and (min-width: 768px) {
@@ -42,16 +56,15 @@
       font-size: 3rem;
       font-weight: 700;
     }
-    button {
+    .home-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
       width: 8vw;
       height: 7vh;
-      display:flex;
-      justify-content: center;
-      align-items: center;
-      margin: 1.8rem 2rem 0 0;
       p {
-        font-size: 1.8rem;
-        padding: 0.8rem;
+        font-size: 1.6rem;
       }
     }
   }
@@ -60,9 +73,23 @@
     height: 80vh;
   }
   #sidebar {
+    .sp_sidebar {
+      display: none;
+    }
+    .pc_sidebar {
+      display: block;
+    }
     height: 90vh;
   }
   #main {
+    #home-modal {
+      z-index: 1000;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
     height: 90vh;
     button {
       width: 15rem;

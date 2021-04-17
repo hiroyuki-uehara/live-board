@@ -1,4 +1,16 @@
 @media screen and (max-width: 768px) {
+
+  footer {
+    color: white;
+    text-align: center;
+    div {
+      padding-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      font-size: 0.8rem;
+    }
+  }
 }
 @media screen and (min-width: 768px) {
   footer {

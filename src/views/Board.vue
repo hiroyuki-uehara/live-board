@@ -3,14 +3,14 @@
     <Header>
       <div><p class="header-title ml-5">Board</p></div>
       <div>
-        <router-link to="/" class="ml-auto mr-3" style="text-decoration: none">
-          <b-button variant="outline-success">
-            <p>
+        <div class="ml-auto mr-3" style="text-decoration: none" @click.prevent="showHomeModal">
+          <b-button class="home-button" variant="outline-success">
+            <p class="mr-3">
               <font-awesome-icon :icon="['fas', 'home-alt']" />
             </p>
             <p>Home</p></b-button
           >
-        </router-link>
+        </div>
       </div>
     </Header>
     <div class="row">
@@ -18,13 +18,52 @@
         id="sidebar"
         class="col-md-3"
         :username="this.user.username"
+        :nickname="this.user.nickname"
         :threads="threads"
         :thread_title="thread_title"
+        :isAdmin="this.isAdmin"
         @name_clicked="memoThread"
         @thread_clicked="discussionThread"
         @plus_clicked="showThreadModal"
       >
-        <section v-for="user in otherUsers" :key="user.user_id" @click="chatThread(user)">
+        <b-dropdown class="sp_sidebar sidebar_dropdown_message" block variant="outline-light"
+          ><template #button-content>
+            <span style="font-size: 1.6rem; font-weight: bold">Direct Messages&nbsp;</span>
+          </template>
+
+          <b-dropdown-item
+            v-for="user in otherUsers"
+            :key="user.user_id"
+            @click="chatThread(user)"
+            class="sp_sidebar"
+          >
+            <span v-if="isOnline(user)">
+              <font-awesome-icon
+                :icon="['fas', 'circle']"
+                style="color: orange; font-size: 1.5rem"
+                class="mr-3"
+              />
+            </span>
+            <span v-else>
+              <font-awesome-icon
+                :icon="['fas', 'circle']"
+                style="color: gray; font-size: 1.5rem"
+                class="mr-3"
+              />
+            </span>
+            <span>{{ user.nickname }}</span>
+          </b-dropdown-item>
+        </b-dropdown>
+
+        <div class="pc_sidebar mb-3">
+          <p style="font-size: 2.5rem; font-weight: bold">Direct Messages</p>
+        </div>
+        <section
+          v-for="user in otherUsers"
+          :key="user.user_id"
+          @click="chatThread(user)"
+          class="pc_sidebar"
+        >
           <span v-if="isOnline(user)">
             <font-awesome-icon
               :icon="['fas', 'circle']"
@@ -39,10 +78,15 @@
               class="mr-3"
             />
           </span>
-          <span>{{ user.username }}</span>
+          <span>{{ user.nickname }}</span>
         </section>
       </Sidebar>
       <div id="main" class="col-md-9">
+        <!-- <Home> -->
+        <div id="home-modal" v-show="homeModal">
+          <Home @board_clicked="closeHomeModal" />
+        </div>
+        <!-- </Home> -->
         <!-- <Thread> -->
         <div id="thread" v-show="threadModal">
           <div id="thread-wrapper" @click.stop>
@@ -84,6 +128,7 @@
         <div id="edit" v-show="editModal">
           <div class="edit-wrapper" @click.stop>
             <div id="edit-box">
+              <span id="edit-message" class="text-muted"> edit mode </span>
               <font-awesome-icon
                 :icon="['far', 'window-close']"
                 class="edit-modal-icon text-muted"
@@ -92,7 +137,6 @@
               <textarea
                 ref="commentInput"
                 autofocus
-                :placeholder="post"
                 v-model="comment"
                 @keyup.enter.ctrl.exact.prevent="saveComment(comment)"
               ></textarea>
@@ -122,7 +166,7 @@
         <!-- <Info> -->
         <div id="info">
           <div v-if="this.email != ''">
-            <v-gravatar :email="email" :size="40" default-img="identicon" />
+            <v-gravatar :email="email" :size="40" default-img="identicon" id="sp-identicon" />
           </div>
           <div v-else>
             <font-awesome-icon :icon="['fal', 'question-circle']" style="font-size: 3rem" />
@@ -131,17 +175,23 @@
             <p style="font-weight: bold">
               {{ room
               }}<small
-                v-show="this.room === this.user.username"
+                v-show="this.room === this.user.nickname"
                 class="ml-3 text-muted"
                 style="font-size: 1.8rem"
                 >you</small
               >
             </p>
-            <p>{{ thread_content }}</p>
+            <p class="pc_sidebar">{{ thread_content }}</p>
+
+            <div class="sp_sidebar" v-if="this.thread_content != ''">
+              <b-button v-b-tooltip.hover.bottom :title="thread_content" variant="outline-dark"
+                ><span>Question</span>
+              </b-button>
+            </div>
           </div>
           <div class="ml-auto">
-            <b-button variant="outline-primary" @click="doWhatsoever">
-              <span>status</span>
+            <b-button class="sp_sidebar" variant="outline-success" @click="showHomeModal">
+              <span>Home</span>
             </b-button>
           </div>
           <div>
@@ -169,10 +219,39 @@
                 </span>
               </template>
             </span>
-            <div><v-gravatar :email="comment.email" :size="50" default-img="identicon" /></div>
-            <div>
-              <h1>{{ comment.username }}</h1>
-              <p>{{ comment.content }}</p>
+            <div style="z-index: 60" id="identicon-box">
+              <v-gravatar
+                :email="comment.email"
+                :size="50"
+                default-img="identicon"
+                id="identicon-size"
+              />
+            </div>
+            <div class="comment-box">
+              <h1>{{ comment.nickname }}</h1>
+              <span class="readable" v-if="isAdmin === true"
+                ><small class="text-muted mr-3">Readable?</small>{{ comment.isReadable }}</span
+              >
+              <div id="comment-content">
+                <p>{{ comment.content }}</p>
+              </div>
+            </div>
+            <div id="overlay" v-if="hideComment(comment)"></div>
+            <div id="adminOverlay" v-if="adminComment(comment)"></div>
+            <div class="toggle-box">
+              <b-button
+                variant="outline-primary"
+                class="ml-auto"
+                v-show="isAdmin === true"
+                @click.prevent="pressShow(comment)"
+                >Show</b-button
+              >
+              <b-button
+                variant="outline-info"
+                v-show="isAdmin === true"
+                @click.prevent="pressHide(comment)"
+                >Hide</b-button
+              >
             </div>
           </div>
         </div>
@@ -218,6 +297,7 @@ import 'firebase/database';
 
 import Header from '../components/Header.vue';
 import Sidebar from '../components/Sidebar.vue';
+import Home from './Home.vue';
 
 export default {
   name: 'Board',
@@ -240,17 +320,25 @@ export default {
       post: '',
       post_id: '',
       editModal: false,
+      homeModal: false,
       connectionRef: firebase.database().ref('connections'),
       connection_id: '',
       connections: [],
+      isAdmin: false,
     };
   },
   components: {
     Header,
     Sidebar,
+    Home,
   },
+  beforeMount() {},
   mounted() {
     this.user = firebase.auth().currentUser;
+
+    if (this.room_id !== '') {
+      firebase.database().ref('comments').child(this.room_id).off();
+    }
 
     firebase
       .database()
@@ -275,13 +363,82 @@ export default {
       .once('value', (snapshot) => {
         if (snapshot.exists()) {
           this.user.username = snapshot.val().username;
-          this.memoThread(this.user.username);
-        } else {
-          console.log('No data available');
+          this.user.lastRoom_id = snapshot.val().lastRoom_id;
+          this.user.nickname = snapshot.val().nickname;
+          if (this.user.username === 'Jay Gatsby') {
+            this.isAdmin = true;
+          }
+
+          firebase
+            .database()
+            .ref('threads')
+            .child(this.user.lastRoom_id)
+            .once('value', (snapshot) => {
+              if (snapshot.exists()) {
+                this.room = snapshot.val().thread_title;
+                this.thread_content = snapshot.val().thread_content;
+              }
+            });
+
+          if (this.user.lastRoom_id === this.user.uid) {
+            this.room = this.user.nickname;
+            this.email = this.user.email;
+            this.thread_content = '';
+          } else {
+            const chat_id = this.user.lastRoom_id
+              .replace(this.user.uid, '')
+              .replace('&', '')
+              .trim();
+
+            firebase
+              .database()
+              .ref('users')
+              .child(chat_id)
+              .once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                  this.room = snapshot.val().username;
+                  this.email = snapshot.val().email;
+                  this.thread_content = '';
+                }
+              });
+          }
+
+          this.room_id = this.user.lastRoom_id;
+
+          firebase
+            .database()
+            .ref('comments')
+            .child(this.room_id)
+            .on('child_added', (snapshot) => {
+              this.comments.push(snapshot.val());
+
+              this.$nextTick(() => {
+                let display_bottom = document.getElementById('display');
+                display_bottom.scrollTop = display_bottom.scrollHeight;
+              });
+            });
+
+          firebase
+            .database()
+            .ref('comments')
+            .child(this.room_id)
+            .on('child_removed', (oldsnapshot) => {
+              this.comments = Object.values(this.comments).filter(
+                (comment) => comment.comment_id !== oldsnapshot.val().comment_id
+              );
+            });
+
+          firebase
+            .database()
+            .ref('comments')
+            .child(this.room_id)
+            .on('child_changed', (snapshot) => {
+              const changedIndex = Object.values(this.comments).findIndex(
+                (comment) => comment.comment_id === snapshot.val().comment_id
+              );
+              Object.values(this.comments)[changedIndex].isReadable = snapshot.val().isReadable;
+            });
         }
-      })
-      .catch((error) => {
-        console.error(error.message);
       });
 
     firebase
@@ -302,10 +459,18 @@ export default {
 
     firebase
       .database()
+      .ref('threads')
+      .on('child_added', (snapshot) => {
+        this.threads.push(snapshot.val());
+      });
+
+    firebase
+      .database()
       .ref('connections')
       .on('child_added', (snapshot) => {
         let new_connection = snapshot.val();
         this.connections.push(new_connection);
+
         this.users.forEach((user) => {
           if (user.user_id === new_connection.user_id) {
             user.status = 'online';
@@ -320,50 +485,37 @@ export default {
 
     firebase
       .database()
-      .ref('threads')
-      .on('child_added', (snapshot) => {
-        this.threads.push(snapshot.val());
-      });
-
-    firebase
-      .database()
       .ref('connections')
-      .on('child_removed', (snapshot) => {
-        let remove_connection = snapshot.val();
+      .on('child_removed', (oldsnapshot) => {
+        let remove_connection = oldsnapshot.val();
 
-        this.connections = this.connections.filter((connection) => {
-          return connection.connection_id !== remove_connection.connection_id;
+        this.connections = Object.values(this.connections).filter(
+          (connection) => connection.connection_id !== remove_connection.connection_id
+        );
+
+        this.otherUsers.forEach((user) => {
+          if (user.user_id === remove_connection.user_id) {
+            user.status = 'offline';
+          }
         });
-
-        let index = this.connections.findIndex((connection) => {
-          return connection.user_id === remove_connection.user_id;
-        });
-
-        if (index === -1) {
-          let user = this.users.find((user) => user.user_id === remove_connection.user_id);
-          user.status = 'offline';
-        }
       });
   },
 
   beforeDestroy() {
     firebase.database().ref('users').off();
-    firebase.database().ref('comments').off();
     firebase.database().ref('threads').off();
+    firebase.database().ref('comments').off();
     firebase.database().ref('.info/connected').off();
     firebase.database().ref('connections').off();
   },
+  computed: {},
 
   methods: {
-    doWhatsoever() {
-      console.log('clicked!!');
-    },
-
-    memoThread(username) {
+    memoThread() {
       this.comments = [];
       this.thread_content = '';
 
-      this.room = username;
+      this.room = this.user.nickname;
       this.email = this.user.email;
       this.placeholder = 'Jot something down';
 
@@ -373,10 +525,12 @@ export default {
 
       this.room_id = this.user.uid;
 
+      firebase.database().ref('users').child(this.user.uid).update({ lastRoom_id: this.room_id });
+
       firebase
         .database()
         .ref('comments')
-        .child(this.user.uid)
+        .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
 
@@ -384,6 +538,29 @@ export default {
             let display_bottom = document.getElementById('display');
             display_bottom.scrollTop = display_bottom.scrollHeight;
           });
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_removed', (oldsnapshot) => {
+          this.comments = Object.values(this.comments).filter(
+            (comment) => comment.comment_id !== oldsnapshot.val().comment_id
+          );
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_changed', (snapshot) => {
+          let i = 0;
+          Object.values(this.comments).filter((comment, index) => {
+            i = index;
+            return comment.comment_id === snapshot.val().comment_id;
+          });
+          Object.values(this.comments).splice(i, 1, snapshot.val());
         });
     },
 
@@ -397,6 +574,8 @@ export default {
 
       this.room_id = thread.thread_id;
 
+      firebase.database().ref('users').child(this.user.uid).update({ lastRoom_id: this.room_id });
+
       this.email = '';
       this.thread_content = thread.thread_content;
       this.placeholder = `Comment on ${thread.thread_title}, please`;
@@ -407,10 +586,34 @@ export default {
         .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
+
           this.$nextTick(() => {
             let display_bottom = document.getElementById('display');
             display_bottom.scrollTop = display_bottom.scrollHeight;
           });
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_removed', (oldsnapshot) => {
+          this.comments = Object.values(this.comments).filter(
+            (comment) => comment.comment_id !== oldsnapshot.val().comment_id
+          );
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_changed', (snapshot) => {
+          let i = 0;
+          Object.values(this.comments).filter((comment, index) => {
+            i = index;
+            return comment.comment_id === snapshot.val().comment_id;
+          });
+          Object.values(this.comments).splice(i, 1, snapshot.val());
         });
     },
 
@@ -437,17 +640,19 @@ export default {
       this.comments = [];
       this.thread_content = '';
 
-      if (this.user.uid > user.user_id) {
-        this.room_id = `${this.user.uid}-${user.user_id}`;
-      } else {
-        this.room_id = `${user.user_id}-${this.user.uid}`;
-      }
-
       if (this.room_id !== '') {
         firebase.database().ref('comments').child(this.room_id).off();
       }
 
-      this.room = user.username;
+      if (this.user.uid > user.user_id) {
+        this.room_id = `${this.user.uid}&${user.user_id}`;
+      } else {
+        this.room_id = `${user.user_id}&${this.user.uid}`;
+      }
+
+      firebase.database().ref('users').child(this.user.uid).update({ lastRoom_id: this.room_id });
+
+      this.room = user.nickname;
       this.email = user.email;
       this.placeholder = `Message to ${user.username}`;
 
@@ -457,6 +662,7 @@ export default {
         .child(this.room_id)
         .on('child_added', (snapshot) => {
           this.comments.push(snapshot.val());
+
           this.$nextTick(() => {
             let display_bottom = document.getElementById('display');
             display_bottom.scrollTop = display_bottom.scrollHeight;
@@ -467,10 +673,23 @@ export default {
         .database()
         .ref('comments')
         .child(this.room_id)
-        .on('child_removed', (snapshot) => {
-          this.comments.filter((comment) => {
-            comment.comment_id !== snapshot.val().comment_id;
+        .on('child_removed', (oldsnapshot) => {
+          this.comments = Object.values(this.comments).filter(
+            (comment) => comment.comment_id !== oldsnapshot.val().comment_id
+          );
+        });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .on('child_changed', (snapshot) => {
+          let i = 0;
+          Object.values(this.comments).filter((comment, index) => {
+            i = index;
+            return comment.comment_id === snapshot.val().comment_id;
           });
+          Object.values(this.comments).splice(i, 1, snapshot.val());
         });
     },
 
@@ -485,9 +704,22 @@ export default {
         comment_id,
         content: this.comment,
         username: this.user.username,
+        nickname: this.user.nickname,
         email: this.user.email,
         createdAt: firebase.database.ServerValue.TIMESTAMP,
+        isReadable: true,
       });
+
+      firebase
+        .database()
+        .ref('threads')
+        .once('child_added', (snapshot) => {
+          if (this.room_id === snapshot.val().thread_id) {
+            firebase.database().ref('comments').child(this.room_id).child(comment_id).update({
+              isReadable: false,
+            });
+          }
+        });
 
       this.comment = '';
     },
@@ -504,6 +736,7 @@ export default {
         .once('value', (snapshot) => {
           this.post = snapshot.val().content;
         });
+      this.comment = this.post;
       this.showEditModal();
       this.$nextTick(() => {
         this.$refs.commentInput.focus();
@@ -522,11 +755,24 @@ export default {
           comment_id: this.post_id,
           content: this.comment,
           username: this.user.username,
+          nickname: this.user.nickname,
           email: this.user.email,
           createdAt: firebase.database.ServerValue.TIMESTAMP,
+          isReadable: true,
         })
         .then(() => {
           this.editModal = false;
+        });
+
+      firebase
+        .database()
+        .ref('threads')
+        .once('child_added', (snapshot) => {
+          if (this.room_id === snapshot.val().thread_id) {
+            firebase.database().ref('comments').child(this.room_id).child(this.post_id).update({
+              isReadable: false,
+            });
+          }
         });
 
       firebase
@@ -557,7 +803,12 @@ export default {
       this.comment = '';
       return this.comment;
     },
-
+    showHomeModal() {
+      this.homeModal = true;
+    },
+    closeHomeModal() {
+      this.homeModal = false;
+    },
     showThreadModal() {
       this.thread_titel = '';
       this.thread_content = '';
@@ -574,6 +825,7 @@ export default {
     closeEditModal() {
       this.editModal = false;
       this.post_id = '';
+      this.clearComment();
     },
 
     isAuthor(comment) {
@@ -590,11 +842,56 @@ export default {
         return false;
       }
     },
-
     signOut() {
       this.connectionRef.child(this.connection_id).remove();
+      firebase.database().ref('.info/connected').off();
       firebase.auth().signOut();
       this.$router.push('/signin');
+    },
+
+    pressShow(comment) {
+      firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).update({
+        isReadable: true,
+      });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .once('value', (snapshot) => {
+          this.comments = snapshot.val();
+        });
+    },
+    pressHide(comment) {
+      firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).update({
+        isReadable: false,
+      });
+
+      firebase
+        .database()
+        .ref('comments')
+        .child(this.room_id)
+        .once('value', (snapshot) => {
+          this.comments = snapshot.val();
+        });
+    },
+    hideComment(comment) {
+      if (comment.username === this.user.username) {
+        return false;
+      } else if (comment.isReadable === true) {
+        return false;
+      } else if (this.isAdmin === true) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    adminComment(comment) {
+      if (this.isAdmin === true && comment.isReadable === false) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
 };
