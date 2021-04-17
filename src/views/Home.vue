@@ -27,7 +27,7 @@
     </Header>
     <div id="main">
       <section>
-        <img src="../assets/images/medicine.jpeg" alt="" class="photo" />
+        <img src="../assets/images/medicine01.jpeg" alt="" class="photo" />
         <article class="en-legend">
           <h1>Medicine</h1>
           <p>Why is Western medicine the dominant form of medicine today?</p>
