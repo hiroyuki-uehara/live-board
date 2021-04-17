@@ -108,10 +108,11 @@
       font-size: 3rem;
       font-weight: 700;
     }
-    button {
+    .signup-button {
+      width: 8vw;
+      height: 7vh;
       p {
-        font-size: 1.4rem;
-        padding: 0.8rem;
+        font-size: 1.6rem;
       }
     }
   }

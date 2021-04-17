@@ -3,14 +3,14 @@
     <Header>
       <div><p class="header-title ml-5">Board</p></div>
       <div>
-        <router-link to="/" class="ml-auto mr-3" style="text-decoration: none">
-          <b-button variant="outline-success">
-            <p>
+        <div class="ml-auto mr-3" style="text-decoration: none" @click.prevent="showHomeModal">
+          <b-button class="home-button" variant="outline-success">
+            <p class="mr-3">
               <font-awesome-icon :icon="['fas', 'home-alt']" />
             </p>
             <p>Home</p></b-button
           >
-        </router-link>
+        </div>
       </div>
     </Header>
     <div class="row">
@@ -18,8 +18,10 @@
         id="sidebar"
         class="col-md-3"
         :username="this.user.username"
+        :nickname="this.user.nickname"
         :threads="threads"
         :thread_title="thread_title"
+        :isAdmin="this.isAdmin"
         @name_clicked="memoThread"
         @thread_clicked="discussionThread"
         @plus_clicked="showThreadModal"
@@ -49,7 +51,7 @@
                 class="mr-3"
               />
             </span>
-            <span>{{ user.username }}</span>
+            <span>{{ user.nickname }}</span>
           </b-dropdown-item>
         </b-dropdown>
 
@@ -76,10 +78,15 @@
               class="mr-3"
             />
           </span>
-          <span>{{ user.username }}</span>
+          <span>{{ user.nickname }}</span>
         </section>
       </Sidebar>
       <div id="main" class="col-md-9">
+        <!-- <Home> -->
+        <div id="home-modal" v-show="homeModal">
+          <Home @board_clicked="closeHomeModal" />
+        </div>
+        <!-- </Home> -->
         <!-- <Thread> -->
         <div id="thread" v-show="threadModal">
           <div id="thread-wrapper" @click.stop>
@@ -168,7 +175,7 @@
             <p style="font-weight: bold">
               {{ room
               }}<small
-                v-show="this.room === this.user.username"
+                v-show="this.room === this.user.nickname"
                 class="ml-3 text-muted"
                 style="font-size: 1.8rem"
                 >you</small
@@ -221,7 +228,7 @@
               />
             </div>
             <div class="comment-box">
-              <h1>{{ comment.username }}</h1>
+              <h1>{{ comment.nickname }}</h1>
               <span class="readable" v-if="isAdmin === true"
                 ><small class="text-muted mr-3">Readable?</small>{{ comment.isReadable }}</span
               >
@@ -290,6 +297,7 @@ import 'firebase/database';
 
 import Header from '../components/Header.vue';
 import Sidebar from '../components/Sidebar.vue';
+import Home from './Home.vue';
 
 export default {
   name: 'Board',
@@ -312,6 +320,7 @@ export default {
       post: '',
       post_id: '',
       editModal: false,
+      homeModal: false,
       connectionRef: firebase.database().ref('connections'),
       connection_id: '',
       connections: [],
@@ -321,6 +330,7 @@ export default {
   components: {
     Header,
     Sidebar,
+    Home,
   },
   beforeMount() {},
   mounted() {
@@ -334,7 +344,7 @@ export default {
       .database()
       .ref('.info/connected')
       .on('value', (snapshot) => {
-        if (snapshot.val() === true && alreadyOnline === false) {
+        if (snapshot.val() === true) {
           let ref = this.connectionRef.push();
           this.connection_id = ref.key;
           ref.onDisconnect().remove();
@@ -354,6 +364,7 @@ export default {
         if (snapshot.exists()) {
           this.user.username = snapshot.val().username;
           this.user.lastRoom_id = snapshot.val().lastRoom_id;
+          this.user.nickname = snapshot.val().nickname;
           if (this.user.username === 'Jay Gatsby') {
             this.isAdmin = true;
           }
@@ -370,7 +381,7 @@ export default {
             });
 
           if (this.user.lastRoom_id === this.user.uid) {
-            this.room = this.user.username;
+            this.room = this.user.nickname;
             this.email = this.user.email;
             this.thread_content = '';
           } else {
@@ -511,11 +522,11 @@ export default {
       console.log(this.room_id);
     },
 
-    memoThread(username) {
+    memoThread() {
       this.comments = [];
       this.thread_content = '';
 
-      this.room = username;
+      this.room = this.user.nickname;
       this.email = this.user.email;
       this.placeholder = 'Jot something down';
 
@@ -652,7 +663,7 @@ export default {
 
       firebase.database().ref('users').child(this.user.uid).update({ lastRoom_id: this.room_id });
 
-      this.room = user.username;
+      this.room = user.nickname;
       this.email = user.email;
       this.placeholder = `Message to ${user.username}`;
 
@@ -704,6 +715,7 @@ export default {
         comment_id,
         content: this.comment,
         username: this.user.username,
+        nickname: this.user.nickname,
         email: this.user.email,
         createdAt: firebase.database.ServerValue.TIMESTAMP,
         isReadable: true,
@@ -754,6 +766,7 @@ export default {
           comment_id: this.post_id,
           content: this.comment,
           username: this.user.username,
+          nickname: this.user.nickname,
           email: this.user.email,
           createdAt: firebase.database.ServerValue.TIMESTAMP,
           isReadable: true,
@@ -801,7 +814,12 @@ export default {
       this.comment = '';
       return this.comment;
     },
-
+    showHomeModal() {
+      this.homeModal = true;
+    },
+    closeHomeModal() {
+      this.homeModal = false;
+    },
     showThreadModal() {
       this.thread_titel = '';
       this.thread_content = '';
@@ -837,6 +855,7 @@ export default {
     },
     signOut() {
       this.connectionRef.child(this.connection_id).remove();
+      firebase.database().ref('.info/connected').off();
       firebase.auth().signOut();
       this.$router.push('/signin');
     },

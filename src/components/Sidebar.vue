@@ -11,7 +11,7 @@
         class="mr-1"
       />
       <span
-        ><strong> {{ username }} </strong><span class="ml-3 text-muted">you</span>
+        ><strong> {{ nickname }} </strong><span class="ml-3 text-muted">you</span>
       </span>
     </section>
     <b-button
@@ -41,7 +41,7 @@
     </b-dropdown>
     <div class="pc_sidebar plus-circle-box">
       <p>Threads</p>
-      <p @click="$emit('plus_clicked')" class="pc-plus-circle">
+      <p @click="$emit('plus_clicked')" class="pc-plus-circle" v-if="isAdmin">
         <font-awesome-icon :icon="['far', 'plus-circle']" class="pt-1 text-muted mr-3" />
       </p>
     </div>
@@ -68,9 +68,11 @@ export default {
   },
   props: {
     username: String,
+    nickname: String,
     user_id: String,
     thread_title: String,
     threads: Array,
+    isAdmin: Boolean,
   },
   components: {},
   methods: {},
