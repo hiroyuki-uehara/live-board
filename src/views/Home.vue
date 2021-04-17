@@ -27,7 +27,7 @@
     </Header>
     <div id="main">
       <section>
-        <img src="../assets/images/medicine2.jpeg" alt="" class="photo" />
+        <img src="../assets/images/medicine.jpeg" alt="" class="photo" />
         <article class="en-legend">
           <h1>Medicine</h1>
           <p>Why is Western medicine the dominant form of medicine today?</p>
@@ -50,7 +50,7 @@
         </article>
       </section>
       <section>
-        <img src="../assets/images/physics.jpg" alt="" class="photo" />
+        <img src="../assets/images/life.jpeg" alt="" class="photo" />
         <article class="en-legend">
           <h1>Physics</h1>
           <p>What makes life possible?</p>
