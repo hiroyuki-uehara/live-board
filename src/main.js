@@ -16,11 +16,10 @@ import 'firebase/database';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faChalkboard, faCircle, faReply } from '@fortawesome/free-solid-svg-icons';
 import { faWindowClose, faEdit } from '@fortawesome/free-regular-svg-icons';
-import { faGithub, faBitbucket, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faGithub, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faHomeAlt } from '@fortawesome/pro-solid-svg-icons';
-import { faBell, faPlusCircle, faHospitalAlt } from '@fortawesome/pro-regular-svg-icons';
+import { faPlusCircle, faHospitalAlt } from '@fortawesome/pro-regular-svg-icons';
 import { faTrashAlt, faQuestionCircle, faCheckSquare } from '@fortawesome/pro-light-svg-icons';
-import { faCoffee } from '@fortawesome/pro-duotone-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import Gravatar from 'vue-gravatar';
@@ -49,13 +48,10 @@ library.add(
   faWindowClose,
   faEdit,
   faGithub,
-  faBell,
   faPlusCircle,
   faTrashAlt,
   faQuestionCircle,
-  faCoffee,
   faYoutube,
-  faBitbucket,
   faHospitalAlt,
   faCheckSquare,
   faHomeAlt
