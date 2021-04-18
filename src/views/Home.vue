@@ -83,6 +83,7 @@ export default {
     Footer,
   },
   mounted() {
+    this.isStillOnline = false;
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.isStillOnline = true;
@@ -90,6 +91,9 @@ export default {
         this.isStillOnline = false;
       }
     });
+  },
+  beforeDestroy() {
+    this.isStillOnline = false;
   },
   methods: {},
 };
