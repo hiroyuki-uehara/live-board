@@ -31,12 +31,13 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBc3Z73kY23qAUDAA0T9yhlTalU_DysJ3Q',
-  authDomain: 'live-board-9ba88.firebaseapp.com',
-  projectId: 'live-board-9ba88',
-  storageBucket: 'live-board-9ba88.appspot.com',
-  messagingSenderId: '632782034664',
-  appId: '1:632782034664:web:3fb85d478649a95c299b5d',
+  apiKey: 'AIzaSyBF6A-va0G5iF9Lax3MEvqrZD8DQjk90cM',
+  authDomain: 'live-board-1c903.firebaseapp.com',
+  databaseURL: 'https://live-board-1c903-default-rtdb.firebaseio.com',
+  projectId: 'live-board-1c903',
+  storageBucket: 'live-board-1c903.appspot.com',
+  messagingSenderId: '11580769067',
+  appId: '1:11580769067:web:477fd46465c1261fe23b6e',
 };
 
 firebase.initializeApp(firebaseConfig);
