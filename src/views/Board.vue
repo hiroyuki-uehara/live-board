@@ -405,7 +405,7 @@ export default {
               .child(chat_id)
               .once('value', (snapshot) => {
                 if (snapshot.exists()) {
-                  this.room = snapshot.val().username;
+                  this.room = snapshot.val().nickname;
                   this.email = snapshot.val().email;
                   this.thread_content = '';
                 }
@@ -659,7 +659,7 @@ export default {
 
       this.room = user.nickname;
       this.email = user.email;
-      this.placeholder = `Message to ${user.username}`;
+      this.placeholder = `Message ${user.nickname}`;
 
       firebase
         .database()
