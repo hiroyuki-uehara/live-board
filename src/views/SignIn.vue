@@ -82,6 +82,10 @@ export default {
     Footer,
   },
   mounted() {
+    window.addEventListener('beforeunload', () => {
+      this.$router.push('/signin');
+    });
+
     firebase
       .database()
       .ref('users')

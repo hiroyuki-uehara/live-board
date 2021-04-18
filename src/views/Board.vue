@@ -84,7 +84,7 @@
       <div id="main" class="col-md-9">
         <!-- <Home> -->
         <div id="home-modal" v-show="homeModal">
-          <Home @board_clicked="closeHomeModal" />
+          <Home @board_clicked="closeHomeModal" :isStillOnline="this.isStillOnline" />
         </div>
         <!-- </Home> -->
         <!-- <Thread> -->
@@ -325,6 +325,7 @@ export default {
       connection_id: '',
       connections: [],
       isAdmin: false,
+      isStillOnline: false,
     };
   },
   components: {
@@ -335,6 +336,14 @@ export default {
   beforeMount() {},
   mounted() {
     this.user = firebase.auth().currentUser;
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.isStillOnline = true;
+      } else {
+        this.isStillOnline = false;
+      }
+    });
 
     if (this.room_id !== '') {
       firebase.database().ref('comments').child(this.room_id).off();
