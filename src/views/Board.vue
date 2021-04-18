@@ -219,7 +219,7 @@
                 </span>
               </template>
             </span>
-            <div style="z-index: 60" id="identicon-box">
+            <div style="z-index: 1500" id="identicon-box">
               <v-gravatar
                 :email="comment.email"
                 :size="50"
@@ -228,7 +228,7 @@
               />
             </div>
             <div class="comment-box">
-              <h1>{{ comment.nickname }}</h1>
+              <h1 style="z-index: 1501">{{ comment.nickname }}</h1>
               <span class="readable" v-if="isAdmin === true"
                 ><small class="text-muted mr-3">Readable?</small>{{ comment.isReadable }}</span
               >
@@ -242,13 +242,13 @@
               <b-button
                 variant="outline-primary"
                 class="ml-auto"
-                v-show="isAdmin === true"
+                v-if="isAdmin === true"
                 @click.prevent="pressShow(comment)"
                 >Show</b-button
               >
               <b-button
                 variant="outline-info"
-                v-show="isAdmin === true"
+                v-if="isAdmin === true"
                 @click.prevent="pressHide(comment)"
                 >Hide</b-button
               >
