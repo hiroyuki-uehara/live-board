@@ -81,10 +81,6 @@ export default {
     Footer,
   },
   mounted() {},
-  beforeDestroy() {
-    this.isStillOnline = false;
-  },
-  methods: {},
 };
 </script>
 
