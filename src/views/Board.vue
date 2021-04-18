@@ -365,7 +365,7 @@ export default {
           this.user.username = snapshot.val().username;
           this.user.lastRoom_id = snapshot.val().lastRoom_id;
           this.user.nickname = snapshot.val().nickname;
-          if (this.user.username === 'John Titor') {
+          if (this.user.username === 'Jay Gatsby') {
             this.isAdmin = true;
           }
 
