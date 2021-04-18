@@ -7,7 +7,6 @@ import Home from '../views/Home.vue';
 import Board from '../views/Board.vue';
 import Register from '../views/Register.vue';
 import SignIn from '../views/SignIn.vue';
-import NotFoundComponent from '../components/NotFoundComponent.vue';
 
 Vue.use(VueRouter);
 
@@ -40,10 +39,6 @@ const routes = [
     path: '/signin',
     name: 'SignIn',
     component: SignIn,
-  },
-  {
-    path: '*',
-    component: NotFoundComponent,
   },
 ];
 
