@@ -65,33 +65,22 @@
 </template>
 
 <script>
-import firebase from 'firebase/app';
-import 'firebase/auth';
-
 import Header from '../components/Header.vue';
 import Footer from '../components/Footer.vue';
 
 export default {
   name: 'Home',
   data() {
-    return {
-      isStillOnline: false,
-    };
+    return {};
+  },
+  props: {
+    isStillOnline: Boolean,
   },
   components: {
     Header,
     Footer,
   },
-  mounted() {
-    this.isStillOnline = false;
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.isStillOnline = true;
-      } else {
-        this.isStillOnline = false;
-      }
-    });
-  },
+  mounted() {},
   beforeDestroy() {
     this.isStillOnline = false;
   },
