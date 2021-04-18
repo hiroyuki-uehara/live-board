@@ -85,7 +85,7 @@
         }
       }
       #overlay {
-        z-index: 50;
+        z-index: 1;
         position: absolute;
         top: 0;
         left: 0;
@@ -97,7 +97,7 @@
         border-radius: 0.3rem;
       }
       #adminOverlay {
-        z-index: 50;
+        z-index: 1;
         position: absolute;
         top: 0;
         left: 0;
@@ -169,7 +169,7 @@
       }
 
       .comment-box {
-        width: 59vw;
+        width: 70vw;
         height: 13vh;
         margin-right: 0.5rem;
         padding: 0.5rem 0rem 0.5rem 0;
@@ -191,26 +191,26 @@
           font-size: 2rem;
           font-weight: bold;
         }
-        div {
+        #comment-content {
           overflow-y: auto;
-          z-index: 16;
+          z-index: 1000;
           position: relative;
           top: 1vh;
           left: 1vw;
-          width: 57vw;
-          height: 5vh;
+          width: 57.5vw;
+          height: 5.2vh;
 
           margin: 2rem 0 0 0;
           padding: 0 0 0 0;
           p {
             font-size: 2rem;
             margin-left: 0rem;
-            padding-right: 2rem;
+            padding-right: 0rem;
           }
         }
       }
       #overlay {
-        z-index: 50;
+        z-index: 1000;
         position: absolute;
         top: 0;
         left: 0;
@@ -222,7 +222,7 @@
         border-radius: 0.3rem;
       }
       #adminOverlay {
-        z-index: 50;
+        z-index: 1200;
         position: absolute;
         top: 0;
         left: 0;
