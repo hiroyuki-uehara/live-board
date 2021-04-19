@@ -120,12 +120,16 @@ export default {
       .database()
       .ref('users')
       .once('value', (snapshot) => {
-        Object.values(snapshot.val()).forEach((user) => {
-          this.usedNicknames.push(user.nickname);
-        });
-        this.availableNicknames = this.nicknames.filter(
-          (name) => !this.usedNicknames.includes(name)
-        );
+        if (snapshot.exists()) {
+          Object.values(snapshot.val()).forEach((user) => {
+            this.usedNicknames.push(user.nickname);
+          });
+          this.availableNicknames = this.nicknames.filter(
+            (name) => !this.usedNicknames.includes(name)
+          );
+        } else {
+          this.availableNicknames.push(this.nicknames[0]);
+        }
       });
   },
   methods: {

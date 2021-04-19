@@ -7,7 +7,6 @@ import Home from '../views/Home.vue';
 import Board from '../views/Board.vue';
 import Register from '../views/Register.vue';
 import SignIn from '../views/SignIn.vue';
-import NotFoundComponent from '../components/NotFoundComponent.vue';
 
 Vue.use(VueRouter);
 
@@ -41,15 +40,11 @@ const routes = [
     name: 'SignIn',
     component: SignIn,
   },
-  {
-    path: '*',
-    component: NotFoundComponent,
-  },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+  // mode: 'history',
+  // base: process.env.BASE_URL,
   routes,
 });
 

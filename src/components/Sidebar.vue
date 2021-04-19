@@ -41,10 +41,10 @@
       </b-dropdown-item>
     </b-dropdown>
     <div class="pc_sidebar plus-circle-box">
-      <p>Threads</p>
-      <p @click="$emit('plus_clicked')" class="pc-plus-circle" v-if="isAdmin">
-        <font-awesome-icon :icon="['far', 'plus-circle']" class="pt-1 text-muted mr-3" />
-      </p>
+      <span>Threads</span>
+      <span @click="$emit('plus_clicked')" class="pc-plus-circle" v-if="isAdmin">
+        <font-awesome-icon :icon="['far', 'plus-circle']" class="pt-1 ml-4 text-muted" />
+      </span>
     </div>
     <section
       v-for="thread in threads"

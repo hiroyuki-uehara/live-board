@@ -84,7 +84,7 @@
       <div id="main" class="col-md-9">
         <!-- <Home> -->
         <div id="home-modal" v-show="homeModal">
-          <Home @board_clicked="closeHomeModal" />
+          <Home @board_clicked="closeHomeModal" :isStillOnline="this.isStillOnline" />
         </div>
         <!-- </Home> -->
         <!-- <Thread> -->
@@ -219,7 +219,7 @@
                 </span>
               </template>
             </span>
-            <div style="z-index: 60" id="identicon-box">
+            <div style="z-index: 1500" id="identicon-box">
               <v-gravatar
                 :email="comment.email"
                 :size="50"
@@ -228,7 +228,7 @@
               />
             </div>
             <div class="comment-box">
-              <h1>{{ comment.nickname }}</h1>
+              <h1 style="z-index: 1501">{{ comment.nickname }}</h1>
               <span class="readable" v-if="isAdmin === true"
                 ><small class="text-muted mr-3">Readable?</small>{{ comment.isReadable }}</span
               >
@@ -242,13 +242,13 @@
               <b-button
                 variant="outline-primary"
                 class="ml-auto"
-                v-show="isAdmin === true"
+                v-if="isAdmin === true"
                 @click.prevent="pressShow(comment)"
                 >Show</b-button
               >
               <b-button
                 variant="outline-info"
-                v-show="isAdmin === true"
+                v-if="isAdmin === true"
                 @click.prevent="pressHide(comment)"
                 >Hide</b-button
               >
@@ -325,6 +325,7 @@ export default {
       connection_id: '',
       connections: [],
       isAdmin: false,
+      isStillOnline: false,
     };
   },
   components: {
@@ -335,6 +336,14 @@ export default {
   beforeMount() {},
   mounted() {
     this.user = firebase.auth().currentUser;
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.isStillOnline = true;
+      } else {
+        this.isStillOnline = false;
+      }
+    });
 
     if (this.room_id !== '') {
       firebase.database().ref('comments').child(this.room_id).off();
@@ -396,7 +405,7 @@ export default {
               .child(chat_id)
               .once('value', (snapshot) => {
                 if (snapshot.exists()) {
-                  this.room = snapshot.val().username;
+                  this.room = snapshot.val().nickname;
                   this.email = snapshot.val().email;
                   this.thread_content = '';
                 }
@@ -650,7 +659,7 @@ export default {
 
       this.room = user.nickname;
       this.email = user.email;
-      this.placeholder = `Message to ${user.username}`;
+      this.placeholder = `Message ${user.nickname}`;
 
       firebase
         .database()

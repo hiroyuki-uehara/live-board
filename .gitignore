@@ -26,5 +26,5 @@ pnpm-debug.log*
 *.sass.map
 *.scss.map
 
-*.jpeg
-*.jpg
+# Local Netlify folder
+.netlify
