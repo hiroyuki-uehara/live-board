@@ -73,10 +73,7 @@
     }
     .plus-circle-box {
       margin: 1rem 0.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      p {
+      span {
         font-size: 2.5rem;
         font-weight: bold;
       }

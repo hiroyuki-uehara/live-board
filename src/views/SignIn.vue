@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-cloak>
     <div id="main">
       <div id="auth-box">
         <div class="text-center text-muted">
@@ -82,6 +82,10 @@ export default {
     Footer,
   },
   mounted() {
+    window.addEventListener('beforeunload', () => {
+      this.$router.push('/signin');
+    });
+
     firebase
       .database()
       .ref('users')
