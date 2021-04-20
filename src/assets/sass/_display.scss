@@ -9,7 +9,7 @@
     .comment {
       top: 0;
       left: 0;
-      z-index: 1;
+      z-index: 15;
       background-color: snow;
       width: 95vw;
       height: 13vh;
@@ -22,7 +22,7 @@
       position: relative;
      
       .display-icon {
-        z-index: 3;
+        z-index: 16;
         position: absolute;
         right: 0;
         bottom: 0.5rem;
@@ -67,16 +67,16 @@
           }
         }
         #comment-content {
-          z-index: 2;
+          z-index: 16;
           position: relative;
           top: 1vh;
           left: 1vw;
-          width: 80vw;
-          height: 10vh;
+          width: 55vw;
+          height: 8vh;
           overflow-x: hidden;
           overflow-y: auto;
           margin: 2rem 0 0 0;
-          padding: 0 0 0 0;
+          padding: 0 0 2rem 0;
           p {
             font-size: 2rem;
             margin-left: 1rem;
@@ -111,7 +111,7 @@
       .toggle-box {
         width: 95vw;
         height: 13vh;
-        z-index: 10;
+        z-index: 15;
         position: absolute;
         margin-bottom: 1rem;
         padding-right: 2rem;
@@ -197,7 +197,7 @@
           position: relative;
           top: 1vh;
           left: 1vw;
-          width: 55vw;
+          width: 54vw;
           height: 5.2vh;
 
           margin: 2rem 0 0 0;
