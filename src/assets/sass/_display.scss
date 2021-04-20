@@ -9,7 +9,7 @@
     .comment {
       top: 0;
       left: 0;
-      z-index: 16;
+      z-index: 1;
       background-color: snow;
       width: 95vw;
       height: 13vh;
@@ -22,7 +22,7 @@
       position: relative;
      
       .display-icon {
-        z-index: 401;
+        z-index: 3;
         position: absolute;
         right: 0;
         bottom: 0.5rem;
@@ -47,7 +47,7 @@
         padding: 0.5rem 0rem 0.5rem 0;
         position: relarive;
         h1 {
-          z-index: 60;
+          z-index: 2;
           position: absolute;
           top: 0.5rem;
           left: 1rem;
@@ -56,7 +56,7 @@
           margin-bottom: 0.4rem;
         }
         .readable {
-          z-index: 61;
+          z-index: 2;
           position: absolute;
           top: 0.2rem;
           right: 1rem;
@@ -67,7 +67,7 @@
           }
         }
         #comment-content {
-          z-index: 50;
+          z-index: 2;
           position: relative;
           top: 1vh;
           left: 1vw;
@@ -85,7 +85,7 @@
         }
       }
       #overlay {
-        z-index: 1;
+        z-index: 5;
         position: absolute;
         top: 0;
         left: 0;
@@ -97,7 +97,7 @@
         border-radius: 0.3rem;
       }
       #adminOverlay {
-        z-index: 1;
+        z-index: 5;
         position: absolute;
         top: 0;
         left: 0;
@@ -111,7 +111,7 @@
       .toggle-box {
         width: 95vw;
         height: 13vh;
-        z-index: 400;
+        z-index: 10;
         position: absolute;
         margin-bottom: 1rem;
         padding-right: 2rem;
@@ -142,7 +142,7 @@
     .comment {
       top: 0;
       left: 0;
-      z-index: 16;
+      z-index: 1500;
       background-color: snow;
       width: 72vw;
       height: 13vh;
@@ -155,7 +155,7 @@
       position: relative;
       overflow: hidden;
       .display-icon {
-        z-index: 401;
+        z-index: 11;
         position: absolute;
         right: 0;
         bottom: 0;
@@ -175,7 +175,7 @@
         padding: 0.5rem 0rem 0.5rem 0;
         position: relarive;
         h1 {
-          z-index: 60;
+          z-index: 2;
           position: absolute;
           top: 0.5rem;
           left: 4vw;
@@ -184,7 +184,7 @@
           margin-bottom: 0.5rem;
         }
         .readable {
-          z-index: 61;
+          z-index: 2;
           position: absolute;
           top: 0.5rem;
           right: 3rem;
@@ -193,11 +193,11 @@
         }
         #comment-content {
           overflow-y: auto;
-          z-index: 1000;
+          z-index: 11;
           position: relative;
           top: 1vh;
           left: 1vw;
-          width: 57.5vw;
+          width: 55vw;
           height: 5.2vh;
 
           margin: 2rem 0 0 0;
@@ -210,7 +210,7 @@
         }
       }
       #overlay {
-        z-index: 1000;
+        z-index: 5;
         position: absolute;
         top: 0;
         left: 0;
@@ -220,9 +220,17 @@
         margin: 0;
         padding: 0;
         border-radius: 0.3rem;
+        h1 {
+          position: absolute;
+          top: 0.5rem;
+          left: 4vw;
+          font-size: 1.6rem;
+          margin-left: 3rem;
+          margin-bottom: 0.5rem;
+        }
       }
       #adminOverlay {
-        z-index: 1200;
+        z-index: 5;
         position: absolute;
         top: 0;
         left: 0;
@@ -236,7 +244,7 @@
       .toggle-box {
         width: 72vw;
         height: 13vh;
-        z-index: 400;
+        z-index: 10;
         position: absolute;
         padding-right: 2.5rem;
         display: flex;

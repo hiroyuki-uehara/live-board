@@ -1,6 +1,6 @@
 @media screen and (max-width: 768px) {
   #thread {
-    z-index: 300;
+    z-index: 200;
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     justify-content: center;
     align-items: center;
     #thread-wrapper {
-      z-index: 310;
+      z-index: 201;
       width: 95vw;
       height: 65vh;
       background-color: snow;

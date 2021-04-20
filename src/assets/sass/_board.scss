@@ -7,7 +7,7 @@
     overflow: hidden;
   }
   #home-modal {
-    z-index: 1000;
+    z-index: 400;
     position: fixed;
     top: 0;
     left: 0;
@@ -83,7 +83,7 @@
   }
   #main {
     #home-modal {
-      z-index: 1000;
+      z-index: 400;
       position: fixed;
       top: 0;
       left: 0;
