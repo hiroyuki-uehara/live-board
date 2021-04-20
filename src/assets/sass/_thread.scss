@@ -55,7 +55,7 @@
 }
 @media screen and (min-width: 768px) {
   #thread {
-    z-index: 300;
+    z-index: 301;
     position: fixed;
     top: 0;
     left: 0;
@@ -66,7 +66,7 @@
     justify-content: center;
     align-items: center;
     #thread-wrapper {
-      z-index: 310;
+      z-index: 300;
       width: 50vw;
       height: 65vh;
       background-color: snow;
