@@ -95,6 +95,15 @@
         margin: 0;
         padding: 0;
         border-radius: 0.3rem;
+        h1 {
+          z-index: 2;
+          position: absolute;
+          top: 0.5rem;
+          left: 1rem;
+          font-size: 1.4rem;
+          margin-left: 0rem;
+          margin-bottom: 0.4rem;
+        }
       }
       #adminOverlay {
         z-index: 5;
