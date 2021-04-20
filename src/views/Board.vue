@@ -227,15 +227,6 @@
                 id="identicon-size"
               />
             </div>
-            <!-- <div class="comment-box">
-              <h1 style="z-index: 100">{{ comment.nickname }}</h1>
-              <span class="readable" v-if="isAdmin === true"
-                ><small class="text-muted mr-3">Readable?</small>{{ comment.isReadable }}</span
-              >
-              <div id="comment-content">
-                <p>{{ comment.content }}</p>
-              </div>
-            </div> -->
             <div id="overlay" v-if="hideComment(comment)">
               <h1 style="z-index: 100">{{ comment.nickname }}</h1>
             </div>
@@ -802,15 +793,13 @@ export default {
     },
 
     deleteComment(comment) {
-      firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).remove();
+      let result = window.confirm('Do you really want to delete this comment?');
 
-      firebase
-        .database()
-        .ref('comments')
-        .child(this.room_id)
-        .once('value', (snapshot) => {
-          this.comments = snapshot.val();
-        });
+      if (result === true) {
+        firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).remove();
+      } else {
+        window.alert('You cancelled.');
+      }
     },
 
     clearComment() {
