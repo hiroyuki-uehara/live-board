@@ -802,15 +802,13 @@ export default {
     },
 
     deleteComment(comment) {
-      firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).remove();
+      let result = window.confirm('Do you really want to delete this comment?');
 
-      firebase
-        .database()
-        .ref('comments')
-        .child(this.room_id)
-        .once('value', (snapshot) => {
-          this.comments = snapshot.val();
-        });
+      if (result === true) {
+        firebase.database().ref('comments').child(this.room_id).child(comment.comment_id).remove();
+      } else {
+        window.alert('You cancelled.');
+      }
     },
 
     clearComment() {
