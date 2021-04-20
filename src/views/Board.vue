@@ -784,7 +784,7 @@ export default {
         .database()
         .ref('comments')
         .child(this.room_id)
-        .once('value', (snapshot) => {
+        .on('value', (snapshot) => {
           this.comments = snapshot.val();
         });
 
