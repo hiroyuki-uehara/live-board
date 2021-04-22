@@ -116,52 +116,13 @@
                 type="text"
                 class="thread-input"
                 required
-                v-model="thread_content"
+                v-model.lazy="thread_content"
               ></b-form-input>
               <b-button variant="primary" type="submit" @click="addThread">Create thread</b-button>
             </b-form>
           </div>
         </div>
         <!-- </Thread> -->
-
-        <!-- <Edit> -->
-        <div id="edit" v-show="editModal">
-          <div class="edit-wrapper" @click.stop>
-            <div id="edit-box">
-              <span id="edit-message" class="text-muted"> edit mode </span>
-              <font-awesome-icon
-                :icon="['far', 'window-close']"
-                class="edit-modal-icon text-muted"
-                @click="closeEditModal"
-              />
-              <textarea
-                ref="commentInput"
-                autofocus
-                v-model="comment"
-                @keyup.enter.ctrl.exact.prevent="saveComment(comment)"
-              ></textarea>
-              <b-button
-                @click.prevent="clearComment"
-                variant="outline-secondary"
-                class="edit-clear-button"
-              >
-                <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 2rem" class="mr-3" />
-                <span>Clear</span>
-              </b-button>
-              <b-button
-                @click.prevent="saveComment(comment)"
-                variant="outline-success"
-                class="edit-reply-button"
-              >
-                <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 2rem" class="mr-3" />
-                <span>Save</span>
-              </b-button>
-            </div>
-
-            <div id="dummy-edit"></div>
-          </div>
-        </div>
-        <!-- </Edit> -->
 
         <!-- <Info> -->
         <div id="info">
@@ -260,7 +221,7 @@
         <!-- </Display> -->
 
         <!-- <Editor> -->
-        <div id="editor">
+        <div id="editor" v-if="editor === true">
           <form>
             <textarea
               autofocus
@@ -287,6 +248,45 @@
           </form>
         </div>
         <!-- </Editor> -->
+
+        <!-- <Edit> -->
+        <div id="edit" v-else>
+          <div class="edit-wrapper" @click.stop>
+            <div id="edit-box">
+              <span id="edit-message" class="text-muted"> edit mode </span>
+              <font-awesome-icon
+                :icon="['far', 'window-close']"
+                class="edit-modal-icon text-muted"
+                @click="closeEditModal"
+              />
+              <textarea
+                ref="commentInput"
+                autofocus
+                v-model="comment"
+                @keyup.enter.ctrl.exact.prevent="saveComment(comment)"
+              ></textarea>
+              <b-button
+                @click.prevent="clearComment"
+                variant="outline-secondary"
+                class="edit-clear-button"
+              >
+                <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 2rem" class="mr-3" />
+                <span>Clear</span>
+              </b-button>
+              <b-button
+                @click.prevent="saveComment(comment)"
+                variant="outline-success"
+                class="edit-reply-button"
+              >
+                <font-awesome-icon :icon="['fas', 'reply']" style="font-size: 2rem" class="mr-3" />
+                <span>Save</span>
+              </b-button>
+            </div>
+
+            <div id="dummy-edit"></div>
+          </div>
+        </div>
+        <!-- </Edit> -->
       </div>
     </div>
   </div>
@@ -323,6 +323,7 @@ export default {
       post_id: '',
       editModal: false,
       homeModal: false,
+      editor: true,
       connectionRef: firebase.database().ref('connections'),
       connection_id: '',
       connections: [],
@@ -743,6 +744,7 @@ export default {
         });
       this.comment = this.post;
       this.showEditModal();
+      this.editor = false;
       this.$nextTick(() => {
         this.$refs.commentInput.focus();
       });
@@ -767,6 +769,7 @@ export default {
         })
         .then(() => {
           this.editModal = false;
+          this.editor = true;
         });
 
       firebase
@@ -827,6 +830,7 @@ export default {
     },
     closeEditModal() {
       this.editModal = false;
+      this.editor = true;
       this.post_id = '';
       this.clearComment();
     },
