@@ -30,13 +30,23 @@ Vue.use(Vuex);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyCfj4uZ6rPSsIM8PtpP_RJq97YBkG5SqCE',
+//   authDomain: 'live-board-80d7b.firebaseapp.com',
+//   projectId: 'live-board-80d7b',
+//   storageBucket: 'live-board-80d7b.appspot.com',
+//   messagingSenderId: '637736999167',
+//   appId: '1:637736999167:web:03b0e4f4a9a06ed1b114ca',
+// };
+
 const firebaseConfig = {
-  apiKey: 'AIzaSyCfj4uZ6rPSsIM8PtpP_RJq97YBkG5SqCE',
-  authDomain: 'live-board-80d7b.firebaseapp.com',
-  projectId: 'live-board-80d7b',
-  storageBucket: 'live-board-80d7b.appspot.com',
-  messagingSenderId: '637736999167',
-  appId: '1:637736999167:web:03b0e4f4a9a06ed1b114ca',
+  apiKey: 'AIzaSyADsrkGNj0i6S3ARBL0ewy7nMIvGCo1-k0',
+  authDomain: 'live-board-plus.firebaseapp.com',
+  databaseURL: 'https://live-board-plus-default-rtdb.firebaseio.com',
+  projectId: 'live-board-plus',
+  storageBucket: 'live-board-plus.appspot.com',
+  messagingSenderId: '646656968844',
+  appId: '1:646656968844:web:2cf8cc66fe4b36214453a9',
 };
 
 firebase.initializeApp(firebaseConfig);
